@@ -5,11 +5,16 @@ on:
     types: [api]
 
 jobs:
-  steps:
-  - uses: actions/checkout@v3
-  - uses: actions/setup-python@v4
-    with:
-      python-version: '3.10' 
-    - env:
-        MESSAGE: ${{ github.event.client_payload.message }}
-      run: python main.py $MESSAGE
+  API:
+    runs-on: ubuntu-latest
+    name: Running API
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: launch Python
+        run: python main.py $MESSAGE
+        env:
+         MESSAGE: ${{ github.event.client_payload.message }}
