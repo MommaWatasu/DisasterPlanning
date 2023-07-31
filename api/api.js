@@ -143,10 +143,9 @@ app.get('/disaster/:name', async (req, res) => {
 
     var ip = await req.ip;
     console.log(ip);
-    if (ip == "::1"){
-        ip = "128.12.123.204"
+    if (ip.startsWith(":")) {
+        ip = "128.12.123.204";
     }
-    
     
     if (ip == "128.12.123.204"){
         locals.city = "Stanford";
@@ -211,10 +210,9 @@ app.get('/disaster/:name', async (req, res) => {
             "longitude": locals.longitude,
             "latitude": locals.latitude,
             "ip": ip
-        },
-        header
-    })
-    */
+        },   
+    }, header)
+  */
     res.render('disaster.ejs', locals);
 });
     

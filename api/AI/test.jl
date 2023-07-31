@@ -9,7 +9,7 @@ using Random
 using Statistics
 
 function load_data()
-    path = "C:\\Users\\Student\\Desktop\\WatasuM\\DisasterML\\data\\earthquake_csv\\1974.csv"
+    path = "C:\\Users\\Student\\Desktop\\LachlanH\\DisasterPlanning\\Api\\csv_result\\1974.csv"
     raw = Matrix(CSV.read(path, DataFrame))
     data = Matrix{Float32}(undef, size(raw, 1), 5)
     for i in 1 : size(raw, 1)
@@ -34,7 +34,7 @@ function process_data(data, train_number)
 end
 
 function main()
-    @load "C:\\Users\\Student\\Desktop\\WatasuM\\DisasterML\\model.bson" model
+    @load "C:\\Users\\Student\\Desktop\\LachlanH\\DisasterPlanning\\Api\\AI\\model.bson" model
     data = load_data()
     scaler, x_train, y_train, x_test, y_test = process_data(data, 0.7)
     println(inv_transform(scaler, model(x_test')[:, 1:10]'))
