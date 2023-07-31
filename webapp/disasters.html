@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>WebApp</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <!--Title and heading image-->
+            <div class="header">
+                <a href="/" style="text-decoration: none;color: white;">
+                    <img src="CDN/images/earthquake.png" width="35" height="35" style="padding-top:0.5cm; padding-left: 0.25cm;"/>
+                    <h class="header-title">Disaster Shield</h>
+                </a>
+
+                <div id="topbar-content-right" style="padding-top: 0.6cm;">
+                    <button id="topbar-button-login" class="topbar-button">Login</button>
+                    <button id="topbar-button-register" class="topbar-button">Register</button>
+                </div>
+            </div>
+        </header>
+
+        <!--Main content-->
+        <div id="maincontent" class="fade-in-button">
+            <h1 class= "textFont" style="color:white; text-align: center; padding-top: 0cm; padding-bottom: 0.5cm; font-weight: bold;">the Disaster Index</h1>
+        </div>
+
+        <div style="background-color: white;">
+            <h1 class= "textFont" style="color: rgb(35, 35, 35); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; font-size: large; padding-top: 1cm;">What is the Disaster Index?</h1>
+            <p class= "textFont" class="textGrey" style="text-align: center; font-size: medium; padding-top: 0.1cm; padding-left: 1cm; padding-right: 1cm; padding-bottom: 1cm;">The Disaster Index is a tool powered by AI that measures past events and provides the likelihood and impact of a future disaster. It can be used as a good indication of how far an expected major event is to occur in your area. This can allow for resources to be allocated accordingly, and raise awareness of having plans for major events.            </p>
+            <p class= "textFont" class="textGrey" style="text-align: center; font-size: smaller; padding-top: 0.1cm; padding-left: 5cm; padding-right: 5cm; padding-bottom: 1cm;color: darkred;">The Disaster Index is only a prediction made by AI and is not to be used as a sole basis for decision-making. It is important to consider other factors, such as historical data, current events, and expert opinion, when making decisions about disaster preparedness. </p>
+            <hr>
+            <h1 class= "textFont" class="textGrey" style="text-align: center; font-size: large; padding-top: 0cm;">View Disaster</h1>
+            <div style="display: flex; justify-content: center; align-items: center; padding-bottom: 0.5cm; float: center;">
+                <div style="padding-right: 0.5cm; padding-left: 0.5cm;">
+                    <div class="clickable-box">
+                        <a href="disaster/earthquake" class="textGrey" style="text-decoration: none;">
+                            <img src="CDN/images/earthquake.png" class="image-element">
+                            <h1 class= "textFont" class="textGrey2" style="text-align: center; font-size: medium; font-weight: 500; padding-bottom: 0.5cm;">Earthquakes</h1>
+                        </a>
+                    </div>
+                </div>
+                <div style="padding-right: 0.5cm; padding-left: 0.5cm;">
+                    <div class="clickable-box">
+                        <img src="CDN/images/tornado.png" class="image-element">
+                        <h1 class= "textFont" class="textGrey2" style="text-align: center; font-size: medium; font-weight: 500; padding-bottom: 0.5cm;">Tornados</h1>
+                    </div>
+                </div>
+                <div style="padding-right: 0.5cm; padding-left: 0.5cm;">
+                    <div class="clickable-box">
+                        <img src="CDN/images/wildfire.png" class="image-element">
+                        <h1 class= "textFont" class="textGrey2" style="text-align: center; font-size: medium; font-weight: 500; padding-bottom: 0.5cm;">Wildfires</h1>
+                    </div>
+                </div>
+                <div style="padding-right: 0.5cm; padding-left: 0.5cm;">
+                    <div class="clickable-box">
+                        <img src="CDN/images/tsunami.png" class="image-element">
+                        <h1 class= "textFont" class="textGrey2" style="text-align: center; font-size: medium; font-weight: 500; padding-bottom: 0.5cm;">Tsunamis</h1>
+                    </div>
+                </div>
+            </div>
+            <hr style="padding-bottom: 1cm;">
+        </div>
+    </body>
+</html>

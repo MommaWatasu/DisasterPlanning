@@ -1,0 +1,18 @@
+{
+    "earthquake": {
+        "name": "Earthquake",
+        "description": "Earthquakes are uncommon, but they can be dangerous. They can cause a variety of secondary hazards, such as landslides, avalanches, tsunamis, flash floods, fires, and rockfalls. They can also cause buildings to collapse and heavy items to fall, resulting in injuries or death. Earthquakes can happen at any time of the year, day or night. They cannot be predicted, so it is important to be prepared before one occurs. The best way to protect yourself and your family is to have an earthquake plan in place.",
+        "image": {
+            "url": "https://www.earthquakecountry.org/library/Drop_Cover_Hold_On_ENG_Blue_Orange_RGB.png",
+            "width": "15.21cm",
+            "height": "5cm",
+            "description": "Duck, cover, and hold. \n\nIf you're indoors during an earthquake, drop to the ground, take cover under a sturdy object, and hold on until the shaking stops. If you're in a classroom, duck under a desk or table. If you're in a hallway, get against a wall. If you can't get under anything, cover your head and neck with your arms."
+        },
+        "options": [
+            {
+                "name": "Important Reminders",
+                "value": ["‧ Do not go into a doorway", "‧ Do not run or panic", "‧ Move away from dangerous areas, such as windows, hanging objects or tall unsecured furniture", "‧ Stay inside under cover until shaking stops"]
+            }
+        ]
+    }
+}

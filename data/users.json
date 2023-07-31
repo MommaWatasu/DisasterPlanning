@@ -1,0 +1,28 @@
+{
+    "John Smith": {
+        "name": "John Smith",
+        "age": 30,
+        "address": {
+            "street": "Main St",
+            "number": 123,
+            "city": "San Francisco",
+            "state": "CA",
+            "zip": 94101,
+            "apt": "1A",
+            "country": "USA"
+        },
+        "household": {
+            "adults": 2,
+            "children": 1,
+            "pets": 1
+        },
+        "contacts": [
+            {
+                "name": "Jane Smith",
+                "relationship": "Spouse",
+                "phone": "555-555-5555",
+                "email": ""
+            }
+        ]
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "earthquake": [ 
+      {
+        "name": "Water",
+        "description": "1 gallon per person per day for at least 3 days",
+        "quantity": 0,
+        "unit": "gallons"
+      },
+      {
+        "name": "Food",
+        "description": "Non-perishable, easy-to-prepare foods that do not require cooking",
+        "quantity": 0,
+        "unit": "days"
+      },
+      {
+        "name": "First-aid kit",
+        "description": "A basic first-aid kit with bandages, antibiotic ointment, pain relievers, and other basic medications",
+        "quantity": 0,
+        "unit": "item"
+      },
+      {
+        "name": "Flashlight",
+        "description": "A flashlight with extra batteries",
+        "quantity": 0,
+        "unit": "item"
+      },
+      {
+        "name": "Radio",
+        "description": "A battery-powered or hand-crank radio with NOAA weather radio capabilities",
+        "quantity": 0,
+        "unit": "item"
+      },
+      {
+        "name": "Multi-tool",
+        "description": "A multi-tool with a variety of tools, such as a knife, pliers, and screwdriver",
+        "quantity": 0,
+        "unit": "item"
+      },
+      {
+        "name": "Sanitation supplies",
+        "description": "Toilet paper, hand sanitizer, and wet wipes",
+        "quantity": 0,
+        "unit": "item"
+      },
+      {
+        "name": "Copies of important documents",
+        "description": "Copies of your identification, insurance policies, and medical records",
+        "quantity": false,
+        "unit": "item"
+      },
+      {
+        "name": "Cash",
+        "description": "Some cash in small bills, in case you cannot use credit cards or ATMs",
+        "quantity": 0,
+        "unit": "dollars"
+      }
+    ]
+}

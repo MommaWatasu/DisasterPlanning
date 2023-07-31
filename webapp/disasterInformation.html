@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Index for <%=name %>s</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <!--Title and heading image-->
+            <div class="header">
+                <a href="/" style="text-decoration: none;color: white;">
+                    <img src="../assets/images/earthquake.png" width="35" height="35" style="padding-top:0.5cm; padding-left: 0.25cm;"/>
+                    <h class="header-title">Disaster Shield</h>
+                </a>
+
+                <div id="topbar-content-right" style="padding-top: 0.6cm;">
+                    <button id="topbar-button-login" class="topbar-button">Login</button>
+                    <button id="topbar-button-register" class="topbar-button">Register</button>
+                </div>
+            </div>
+        </header>
+
+        <!--Main content-->
+        <div id="maincontent" class="fade-in-button">
+            <h1 class= "textFont" style="color:white; text-align: center; padding-top: 0cm; padding-bottom: 0.5cm; font-weight: bold;">Information for <%=name %>s</h1>
+        </div>
+
+        <div style="background-color: white;">
+            <h1 class= "textFont" style="color: rgb(35, 35, 35); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; font-size: large; padding-top: 1cm;">Current Location: <%=city%>, <%=region%></h1>
+            
+            <iframe src="https://maps.google.com/maps?q=<%=latitude%>,<%=longitude%>&hl=es;z=14&amp;output=embed&disableDefaultUI=true" style="width: 7cm; height: 6cm;"></iframe>
+            
+            <hr>
+
+            <hr style="padding-bottom: 1cm;">
+        </div>
+    </body>
+</html>
