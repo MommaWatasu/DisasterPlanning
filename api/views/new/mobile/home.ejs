@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="theme-color" content="rgb(254, 254, 254)"/>
+        
+        <title>Disaster Index</title>
+        <link rel="stylesheet" href="../style2.css">
+    </head>
+    <body>
+        <header>
+            <img src="../CDN/images/earthquake.png" width="135em" height="135em" style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;"/>
+            <h1 class="textFont" style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">Disaster Index</1h>
+        </header>
+
+        <div id="maincontent">
+            <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 4em; padding-top: 0em;"><%=city%>, <%=region%></h1>
+            
+
+            <div id="map" style="padding-top: 0.5em;">
+                <iframe src="https://maps.google.com/maps?width=150%;height=150%;hl=en&amp;q=<%=latitude%>,<%=longitude%>+(<%=city%>)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" style="width: 90%; height: 25em;display:block;margin: auto;border-radius: 0.5em;border-width: 0.05em; border-color: black;"></iframe>
+            </div>
+
+            <div id="divider" style="padding-top: 0.5em;">
+                <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
+            </div>
+
+            <div id="buttons" style="padding-top: 1.5em;">
+                <!--background: linear-gradient(135deg, rgba(253,200,48,1) 0%, rgba(243,115,53,1) 100%); -->
+                <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
+                    <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 5em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between">Risk Assessment</p>
+                    <p class="textFont" style="color: rgb(0, 0, 0);text-align: right;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 0em;padding-right: 0.25em;font-size: 2em; display: flex; justify-content: space-between">→</p>
+                </div>
+                <div id="risk-assessment" style="border-radius: 1em; padding-top: 15em; width: 95%; text-align: center; margin: 0 auto; border-width: 1em; border-color: black; display: flex;">
+                </div>
+        </div>
+    </body>
+</html>

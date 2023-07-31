@@ -7,6 +7,8 @@ const axios = require('axios');
 const ejs = require('ejs');
 const fs = require('fs');
 
+const userAgentParser = require("user-agent");
+
 let userData = require('../data/users.json');
 let suppliesData = require('../data/supplies.json');
 let prepareData = require('../data/prepare.json');
@@ -14,14 +16,18 @@ let prepareData = require('../data/prepare.json');
 const GithubActionURL = "https://api.github.com/repos/MommaWatasu/DisasterPlanning/dispatches";
 const Token = "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";
 
-console.log(Token);
-
 const header = {
     "Accept": "application/vnd.github.everest-preview+json",
     "Content-Type": "application/json",
     "Authorization": "Bearer " + Token
 }
 
+const isMobile = (req, res) => {
+    const userAgent = req.headers["user-agent"];
+    const agent = userAgentParser.parse(userAgent);
+    console.log(agent)
+    return agent.os == "iPhone";
+};
 
 var jobCache = {};
 jobCache = JSON.parse(fs.readFileSync('../data/jobCache.json', 'utf8'));
@@ -30,6 +36,12 @@ app.set('trust proxy', true);
 app.set('view engine', 'ejs');
 
 async function updateCache(){
+    for (var job in jobCache){
+        if (job.time < Date.now() - 600000){
+            delete jobCache[job];
+        }
+    }
+
     await fs.writeFileSync('../data/jobCache.json', JSON.stringify(jobCache), 'utf8');
     return
 }
@@ -73,7 +85,11 @@ app.get('/disasters', (req, res) => {
 app.get('/style.css', (req, res) => {
     const cssPath = path.join(__dirname, '..', 'webapp', 'style.css');
     res.sendFile(cssPath);
-    
+});
+
+app.get('/style2.css', (req, res) => {
+    const cssPath = path.join(__dirname, '..', 'webapp', 'style2.css');
+    res.sendFile(cssPath);
 });
 
 app.get('/CDN/images/:image', (req, res) => {
@@ -184,7 +200,7 @@ app.get('/disaster/:name', async (req, res) => {
         }
     }
 
-    console.log(jobID);
+    //var previous = jobCache.find(job => job.ip == ip);
 
     jobCache[jobID] = {
         "name": req.params.name,
@@ -194,7 +210,8 @@ app.get('/disaster/:name', async (req, res) => {
         "latitude": locals.latitude,
         "jobID": jobID,
         "ip": ip,
-        "status": "pending"
+        "status": "pending",
+        "time": Date.now()
     }
 
     await updateCache();
@@ -213,7 +230,14 @@ app.get('/disaster/:name', async (req, res) => {
         },   
     }, header)
   */
-    res.render('disaster.ejs', locals);
+    console.log(req.headers)
+    if (isMobile(req, res)) {
+        console.log("mobile")
+        res.render('new/mobile/indexinfo.ejs', locals);
+    } else {
+        res.render('new/mobile/indexinfo.ejs', locals);
+    }
+   
 });
     
 app.get('/prepare/:name', async (req, res) => {
@@ -265,6 +289,43 @@ app.get('/api/clientlocation', async (req, res) => {
     // https://ipapi.co/128.12.123.204/json/
 });
 
+app.get('/app', async (req, res) => {
+
+    var locals = {
+    };
+
+    var ip = await req.ip;
+    console.log(ip);
+    if (ip.startsWith(":")) {
+        ip = "128.12.123.204";
+    }
+    
+    if (ip == "128.12.123.204"){
+        locals.city = "Stanford";
+        locals.region = "CA";
+        locals.longitude = "-122.1639";
+        locals.latitude = "37.423";
+        locals.response = false
+    }else{
+        var ipInfo = await getIPInfo(ip);
+        if (ipInfo.city){
+            locals.city = ipInfo.city;
+            locals.region = ipInfo.region_code;
+            locals.longitude = ipInfo.longitude;
+            locals.latitude = ipInfo.latitude;
+            locals.response = false
+        }
+    }
+
+    if (isMobile(req, res)) {
+        res.render('new/mobile/home.ejs', locals);
+    } else {
+        res.render('new/mobile/home.ejs', locals);
+    }
+   
+});
+
 app.use(function(req, res, next) {
     res.redirect('/'); 
 });
+
