@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 
-var year = 1983;
+var year = 2023;
 var startMonth = 1;
 var endMonth = 6;
 var running = true;
