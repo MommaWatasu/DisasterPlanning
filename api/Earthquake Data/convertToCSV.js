@@ -1,18 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
-const folderPath = './toconvert';
+const folderPath = './earthquakedataset';
 
 var year = 2023;
 var month = 1;
 var month2 = 6;
 
 var csv_base = [
-    ["Time", "Mag", "Lat", "Long", "Depth"],
+    ["Time", "Mag", "Lat", "Long", "Depth", "Day", "Month"],
 ]
 
 var csv_data = [
-    ["Time", "Mag", "Lat", "Long", "Depth"],
+    ["Time", "Mag", "Lat", "Long", "Depth", "Day", "Month"],
 ]
 
 const toCsv = (data) => {
@@ -27,17 +27,18 @@ const saveCsv = (data, filePath, year) => {
 
 while (year > 1972) {
     if (month == 1){
-        csv_data = [["Time", "Mag", "Lat", "Long", "Depth"]];
+        csv_data = [["Time", "Mag", "Lat", "Long", "Depth", "Day", "Month"]];
     }
     var newpath = path.join(folderPath, `${year}-${month}-${month2}.json`);
     if(fs.statSync(newpath).isFile()){
         const fileContents = JSON.parse(fs.readFileSync(newpath));
         console.log(fileContents)
         if (month == 1){
-            csv_data = [["Time", "Mag", "Lat", "Long", "Depth"]];
+            csv_data = [["Time", "Mag", "Lat", "Long", "Depth", "Day", "Month"]];
         }
         for (var i = 0; i < fileContents.length; i++){
-            csv_data.push([`${fileContents[i].time}`, `${fileContents[i].mag}`, `${fileContents[i].lat}`, `${fileContents[i].long}`, `${fileContents[i].depth}`]);
+            console.log(fileContents[i])
+            csv_data.push([`${fileContents[i].time}`, `${fileContents[i].mag}`, `${fileContents[i].lat}`, `${fileContents[i].long}`, `${fileContents[i].depth}`, `${fileContents[i].day}`, `${fileContents[i].month}`]);
         }
     }
 
@@ -47,7 +48,7 @@ while (year > 1972) {
         month = 1;
         month2 = 6;
         year--;
-        csv_data = [["Time", "Mag", "Lat", "Long", "Depth"]];
+        csv_data = [["Time", "Mag", "Lat", "Long", "Depth", "Day", "Month"]];
     }else{
         month = 6;
         month2 = 12;

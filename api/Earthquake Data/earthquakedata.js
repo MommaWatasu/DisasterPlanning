@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 
-var year = 2023;
+var year = 1983;
 var startMonth = 1;
 var endMonth = 6;
 var running = true;
@@ -46,6 +46,8 @@ async function getDisasterData(){
             "lat": earthquake.geometry.coordinates[1],
             "long": earthquake.geometry.coordinates[0],
             "depth": earthquake.geometry.coordinates[2],
+            "month": date.getMonth(),
+            "day": date.getDate(),
         }
 
         earthquakes.push(topush);
