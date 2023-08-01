@@ -2,8 +2,6 @@
 using Genie, Genie.Requests, Genie.Renderer.Json
 using HorseML.Preprocessing
 using HorseML.Preprocessing: transform, inv_transform
-using Dates
-using Dates: day
 # import the libraries for AI
 using Flux
 using HorseML.Preprocessing
@@ -32,7 +30,11 @@ route("/earthquake.json", method=POST) do
     model_data = [earthquake_data["month"], earthquake_data["day"], earthquake_data["time"], earthquake_data["mag"], earthquake_data["lat"], earthquake_data["long"], earthquake_data["depth"]]
     model_data = hcat(model_data, model_data)'
     output = predict(model_data)
-    data = Dict("date"=>output[1], "hour"=>output[2], "mag"=>output[3], "id"=>json_data["jobID"])
+    month = earthquake_data["month"]
+    if Int(round(output[1])) - earthquake_data["day"] < 0
+        month += 1
+    end
+    data = Dict("month"=>month, "day"=>Int(round(output[1])), "hour"=>Int(round(output[2])), "mag"=>round(output[3]*100)/100, "id"=>json_data["jobID"])
     json(data)
 end
 
