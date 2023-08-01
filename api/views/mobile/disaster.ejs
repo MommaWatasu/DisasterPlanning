@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Index for <%=name %>s</title>
+        <link rel="stylesheet" href="../style.css">
+    </head>
+    <body>
+        <header>
+            <!--Title and heading image-->
+            <div class="header">
+                <a href="/" style="text-decoration: none;color: white;">
+                    <img src="../CDN/images/earthquake.png" width="150em" height="150em" style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;"/>
+                    <h1 class= "textFont" style="color:white; text-align: center; padding-top: 0cm; padding-bottom: 0.5cm; font-weight: normal; font-size: 1em;">Disaster Index</1h>
+                </a>
+            </div>
+        </header>
+
+        <!--Main content-->
+        <div id="maincontent" class="fade-in-button">
+            <h1 class= "textFont" style="color:white; text-align: center; padding-top: 0cm; padding-bottom: 0.5cm; font-weight: bold;font-size: 3em;">Information for <%=name %>s</h1>
+        </div>
+
+        <div style="background-color: white;">
+            <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 3em; padding-top: 1cm;"><%=city%>, <%=region%></h1>
+            <hr>
+            <div style="margin: auto; width: 20em; height: 3em;background-color: rgb(181, 118, 0); border-radius: 0.25cm;">
+                <p class="textFont" style="color: white;text-align: center;font-weight: bold;user-select: none;font-size: 1.5em;padding-top: 0.35em;">Moderate Risk</p>
+            </div>
+            <p class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: small; padding-top: 0cm;">Location based on IP Address</p>
+            <hr>
+            <iframe src="https://maps.google.com/maps?width=150%;height=150%;hl=en&amp;q=<%=latitude%>,<%=longitude%>+(<%=city%>)&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" style="width: 80%; height: 40em;display:block;margin: auto;border-radius: 0.5em;border-width: 0.05em; border-color: black;"></iframe>
+            
+            <hr style="height: 0.01cm; background-color:black;">
+            <h1 class= "textFont" class="textGrey" style="color: rgb(35, 35, 35); text-align: center; font-size: 3em;">Information For Your Area:</h1>
+
+            <div id="assestment-result">
+                <p class="textFont" style="color: rgb(0, 0, 0);text-align: center;font-weight: normal;user-select: none;font-size: 1.5em;">This area has been marked as having a Moderate rating</p>
+            
+                <table style="width: 80%; margin: 0 auto;">
+                    <tr>
+                        <th class="textFont" style="border: 0.001cm solid; font-size: 1.5em;">Risk</th>
+                        <th class="textFont" style="border: 0.001cm solid; font-size: 1.5em;">Chance</th>
+                    </tr>
+                    <tr>
+                        <td class="textFont" style="border: 0.001cm solid; text-align: center; font-size: 1em;">Low</th>
+                        <td class="textFont" style="border: 0.001cm solid; padding-left: 0.1cm; font-size: 1em;">Less than 1% chance of 6.7+</th>
+                    </tr>
+                    <tr>
+                        <td class="textFont" style="border: 0.001cm solid; text-align: center; font-size: 1em;">Moderate</th>
+                        <td class="textFont" style="border: 0.001cm solid;padding-left: 0.1cm; font-size: 1em;">Between 2% and 10% chance of 6.7+</th>
+                    </tr>
+                    <tr>
+                        <td class="textFont" style="border: 0.001cm solid; text-align: center; font-size: 1em;">High</th>
+                        <td class="textFont" style="border: 0.001cm solid; padding-left: 0.1cm; font-size: 1em;">More than 10% chance of 6.7+</th>
+                    </tr>
+                </table>
+            </div>
+
+            <hr style="height: 0.01cm; background-color:black;">
+        </div>
+    </body>
+</html>
