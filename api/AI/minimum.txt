@@ -1,1 +1,2 @@
-minimum loss: 0.023428207
+minimum loss: 0.023428207(only hours)
+minimum loss: 0.034281664(with magnitude)
