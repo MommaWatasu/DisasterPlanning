@@ -2,12 +2,12 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="theme-color" content="rgb(254, 254, 254)"/>
+        <meta name="theme-color" content="rgb(238,238,238)"/>
         
         <title>Disaster Index</title>
         <link rel="stylesheet" href="../style2.css">
     </head>
-    <body>
+    <body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);">
         <header>
             <img src="../CDN/images/earthquake.png" width="135em" height="135em" style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;"/>
             <h1 class="textFont" style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">Disaster Index</1h>
@@ -27,11 +27,22 @@
 
             <div id="buttons" style="padding-top: 1.5em;">
                 <!--background: linear-gradient(135deg, rgba(253,200,48,1) 0%, rgba(243,115,53,1) 100%); -->
-                <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
-                    <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex;">Risk Assessment</p>
-                </div>
-                <div id="risk-assessment" style="border-radius: 1em; padding-top: 15em; width: 95%; text-align: center; margin: 0 auto; border-width: 1em; border-color: black; display: flex;">
-                </div>
+                <a href="../../app/risk" style="text-decoration: none;">
+                    <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
+                        <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Risk Assessment</p>
+                        <img src="../CDN/images/test-results.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 0.1em; user-select: none;"/>
+                    </div>
+                </a>
+
+                <div style="padding-top: 1.5em;"></div>
+
+                <a href="../../app/plan" style="text-decoration: none;">
+                    <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
+                        <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Make a Plan</p>
+                        <img src="../CDN/images/strategy-board.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 0.1em; user-select: none;"/>
+                    </div>
+                </a>
+            </div>
         </div>
     </body>
 </html>
