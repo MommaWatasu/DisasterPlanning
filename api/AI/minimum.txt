@@ -1,2 +1,2 @@
-minimum loss: 0.0376029(main model)
-minimum loss: 0.0005166993(day model)
+minimum loss: 0.95259327(main model)
+minimum loss: 0.4757331(location model)
