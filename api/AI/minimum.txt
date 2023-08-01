@@ -1,2 +1,2 @@
-minimum loss: 0.023428207(only hours)
-minimum loss: 0.029216347(with magnitude)
+minimum loss: 0.0376029(main model)
+minimum loss: 0.0005166993(day model)

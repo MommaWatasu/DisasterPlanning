@@ -12,26 +12,27 @@ using BSON: @load
 
 function predict(data)
     # load the model and scaler
-    @load "./xscaler.bson" xscaler
-    @load "./tscaler.bson" tscaler
-    @load "./model.bson" model
+    @load "./main-model/xscaler.bson" xscaler
+    @load "./main-model/tscaler.bson" tscaler
+    @load "./main-model/model.bson" model
     # predict
-    println(model(transform(xscaler, data)'))
-    return inv_transform(tscaler, model(transform(xscaler, data)')')
+    main_predict = inv_transform(tscaler, model(transform(xscaler, data)')')
+    @load "./day-model/xscaler.bson" xscaler
+    @load "./day-model/tscaler.bson" tscaler
+    @load "./day-model/model.bson" model
+    # predict
+    day_predict = inv_transform(tscaler, model(transform(xscaler, data)')')
+    return hcat(day_predict, main_predict)
 end
 
 # route for providing API
 route("/earthquake.json", method=POST) do
     json_data = jsonpayload()
     earthquake_data = json_data["last"]
-    model_data = [earthquake_data["time"], earthquake_data["mag"], earthquake_data["lat"], earthquake_data["long"], earthquake_data["depth"]]
+    model_data = [earthquake_data["month"], earthquake_data["day"], earthquake_data["time"], earthquake_data["mag"], earthquake_data["lat"], earthquake_data["long"], earthquake_data["depth"]]
     model_data = hcat(model_data, model_data)'
-    hour = predict(model_data)[1, 1]
-    pday = day(now())
-    if hour-earthquake_data["time"] < 0
-        pday = day(now()) + 1
-    end
-    data = Dict("data"=>pday, "hour"=>hour, "id"=>json_data["jobID"])
+    output = predict(model_data)
+    data = Dict("date"=>output[1], "hour"=>output[2], "mag"=>output[3], "id"=>json_data["jobID"])
     json(data)
 end
 
