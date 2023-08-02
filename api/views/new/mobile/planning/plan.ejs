@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="theme-color" content="rgb(238,238,238)"/>
+        
+        <title>Select Plan</title>
+        <link rel="stylesheet" href="../../style2.css">
+
+        <script>
+            const jobId = localStorage.getItem(`plan_<%=name%>`);
+            console.log(jobId);
+            
+            if (jobId){
+                document.getElementById("test").innerHTML = "hi";
+            }
+            /*
+            if (jobId) {
+              fetch("/job-started", {
+                method: "POST",
+                body: JSON.stringify({
+                  jobId,
+                }),
+              });
+            }else{
+                console.log("No job id");
+                localStorage.setItem(`plan_<%=name%>`, "1234");
+            }*/
+            </script>
+    </head>
+    <body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);" class="fade-in-button">
+        <header>
+            <img src="../../CDN/images/earthquake.png" width="135em" height="135em" style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;"/>
+            <h1 class="textFont" style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">Disaster Index</1h>
+        </header>
+
+        <div id="maincontent">
+            <h1 class="textFont" class="fade-in-button" style="color: rgb(35, 35, 35); text-align: center; font-size: 4em; padding-top: 0em;"><%=name%> Plan</h1>
+
+            <div id="divider" class="fade-in-button" style="padding-top: 0.5em;">
+                <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
+            </div>
+            
+            <h1 class="textFont" class="fade-in-button" style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;">Supplies</h1>
+        </div>
+    </body>
+</html>

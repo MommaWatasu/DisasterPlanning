@@ -6,6 +6,7 @@ const path = require('path');
 const axios = require('axios');
 const ejs = require('ejs');
 const fs = require('fs');
+const store = require('store');
 
 const userAgentParser = require("user-agent");
 
@@ -25,12 +26,14 @@ const header = {
 const isMobile = (req, res) => {
     const userAgent = req.headers["user-agent"];
     const agent = userAgentParser.parse(userAgent);
-    console.log(agent)
     return agent.os == "iPhone";
 };
 
 var jobCache = {};
 jobCache = JSON.parse(fs.readFileSync('../data/jobCache.json', 'utf8'));
+
+var planCache = {};
+planCache = JSON.parse(fs.readFileSync('../data/planCache.json', 'utf8'));
 
 app.set('trust proxy', true);
 app.set('view engine', 'ejs');
@@ -43,6 +46,8 @@ async function updateCache(){
     }
 
     await fs.writeFileSync('../data/jobCache.json', JSON.stringify(jobCache), 'utf8');
+
+    await fs.writeFileSync('../data/planCache.json', JSON.stringify(planCache), 'utf8');
     return
 }
 setTimeout(updateCache, 30000);
@@ -325,7 +330,172 @@ app.get('/app', async (req, res) => {
    
 });
 
+app.get('/app/risk', async (req, res) => {
+
+    var locals = {
+    };
+
+    var ip = await req.ip;
+    console.log(ip);
+    if (ip.startsWith(":")) {
+        ip = "128.12.123.204";
+    }
+    
+    if (ip == "128.12.123.204"){
+        locals.city = "Stanford";
+        locals.region = "CA";
+        locals.longitude = "-122.1639";
+        locals.latitude = "37.423";
+        locals.response = false
+    }else{
+        var ipInfo = await getIPInfo(ip);
+        if (ipInfo.city){
+            locals.city = ipInfo.city;
+            locals.region = ipInfo.region_code;
+            locals.longitude = ipInfo.longitude;
+            locals.latitude = ipInfo.latitude;
+            locals.response = false
+        }
+    }
+
+    if (isMobile(req, res)) {
+        res.render('new/mobile/indexinfo.ejs', locals);
+    } else {
+        res.render('new/mobile/indexinfo.ejs', locals);
+    }
+   
+});
+
+app.get('/app/plan', async (req, res) => {
+    var locals = {
+    };
+
+    var ip = await req.ip;
+    console.log(ip);
+    if (ip.startsWith(":")) {
+        ip = "128.12.123.204";
+    }
+    
+    if (ip == "128.12.123.204"){
+        locals.city = "Stanford";
+        locals.region = "CA";
+        locals.longitude = "-122.1639";
+        locals.latitude = "37.423";
+        locals.response = false
+    }else{
+        var ipInfo = await getIPInfo(ip);
+        if (ipInfo.city){
+            locals.city = ipInfo.city;
+            locals.region = ipInfo.region_code;
+            locals.longitude = ipInfo.longitude;
+            locals.latitude = ipInfo.latitude;
+            locals.response = false
+        }
+    }
+
+    if (isMobile(req, res)) {
+        res.render('new/mobile/planning/select.ejs', locals);
+    } else {
+        res.render('new/mobile/planning/select.ejs', locals);
+    }
+})
+
+app.get("/app/plan/:name", async (req, res) => {
+    var locals = {};
+    locals.name = req.params.name;
+
+    var ip = await req.ip;
+    console.log(ip);
+    if (ip.startsWith(":")) {
+        ip = "128.12.123.204";
+    }
+    
+    if (ip == "128.12.123.204"){
+        locals.city = "Stanford";
+        locals.region = "CA";
+        locals.longitude = "-122.1639";
+        locals.latitude = "37.423";
+        locals.response = false
+    }else{
+        var ipInfo = await getIPInfo(ip);
+        if (ipInfo.city){
+            locals.city = ipInfo.city;
+            locals.region = ipInfo.region_code;
+            locals.longitude = ipInfo.longitude;
+            locals.latitude = ipInfo.latitude;
+            locals.response = false
+        }
+    }
+    console.log(store.get(`plan_${req.params.name}`))
+
+    
+
+    if(store.get(`plan_${req.params.name}`)){
+        console.log("plan_jobs exists");
+        var planID = store.get(`plan_${req.params.name}`);
+        var plan = planCache[planID];
+        plan.ip.push(await req.ip);
+    }else{
+        var found = true;
+        var key = "";
+        while (found){
+            key = createRandomString(10);
+            if (planCache[key] == undefined){
+                found = false;
+            }else{
+                found = true;
+            }
+        }
+        planCache[key] = {
+            "name": req.params.name,
+            "ip": [await req.ip],
+            "time": new Date(),
+            "location": {
+                "city": locals.city,
+                "region": locals.region,
+                "longitude": locals.longitude,
+                "latitude": locals.latitude
+            },
+            "actions": [],
+            "supplies": [],
+        };
+        store.set(`plan_${req.params.name}`, key);
+        updateCache();
+    }
+
+    if (isMobile(req, res)) {
+        res.render('new/mobile/planning/plan.ejs', locals);
+    } else {
+        res.render('new/mobile/planning/plan.ejs', locals);
+    }
+});
+
+app.get("/api/storeadd", async (req, res) => {
+    store.set("test", "test");
+    res.send("done");
+});
+
+app.get("/api/storeget", async (req, res) => {
+    console.log(store.get("test"));
+    res.send(store.get("test"));
+});
+
+app.post("/api/plan/:jobid/checked", async (req, res) => {
+
+});
+
+/* 
 app.use(function(req, res, next) {
     res.redirect('/'); 
 });
 
+*/
+
+/*
+await sleep(0)
+    function sleep(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+    }
+*/
