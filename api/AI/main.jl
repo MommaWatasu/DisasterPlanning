@@ -1,10 +1,10 @@
 # import the libraris for hosting API
 using Genie, Genie.Requests, Genie.Renderer.Json
-using HorseML.Preprocessing
-using HorseML.Preprocessing: transform, inv_transform
 # import the libraries for AI
 using Flux
+using HorseML.Clustering
 using HorseML.Preprocessing
+using HorseML.Preprocessing: transform, inv_transform
 using BSON
 using BSON: @load
 using CSV
@@ -82,6 +82,31 @@ function risk_calculation(data, lat, lon)
     return mean(magnitude ./ (distance*10).^3)
 end
 
+# load risk file
+function load_risks()
+    path = "risks.csv"
+    return Matrix(CSV.read(path, DataFrame))
+end
+
+function clustering(risk)
+    x = dropdims(load_risks(), dims=2)
+    push!(x, risk)
+    model = Kmeans(3)
+    Clustering.fit!(model, x)
+    return x, model.labels
+end
+
+function risk_level(risk)
+    data, labels = clustering(risk)
+    if labels[argmin(data)] == labels[end]
+        return 1
+    elseif labels[argmax(data)] == labels[end]
+        return 3
+    else
+        return 2
+    end
+end
+
 # route for providing API
 route("/earthquake.json", method=POST) do
     json_data = jsonpayload()
@@ -127,12 +152,14 @@ end
 
 route("/risk.json", method=POST) do
     json_data = jsonpayload()
+    println(json_data)
     risk = risk_calculation(load_all_data(), json_data["lat"], json_data["long"])
     if risk == Inf
         risk = 0
     end
     json(Dict(
             "risk"=>risk,
+            "level"=>risk_level(risk),
             "id"=>json_data["jobID"]
         )
     )
