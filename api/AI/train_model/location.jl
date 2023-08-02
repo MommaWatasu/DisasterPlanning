@@ -41,7 +41,7 @@ end
 
 function process_data(data, train_number)
     # create test data
-    tdata = data[:, 5:6]
+    tdata = data[:, 5:7]
     idx = collect(1:size(tdata, 1)-1)
     shuffle!(idx)
     trains = round(Int, size(tdata, 1) * train_number)
@@ -68,7 +68,7 @@ function create_model(min)
         Dense(10=>20, relu),
         Dense(20=>10, relu),
         # output layer
-        Dense(10=>2)
+        Dense(10=>3)
     )
     loss(x, y) = mse(model(x), y)
     opt = Adam()
@@ -95,6 +95,9 @@ function create_model(min)
     println("======longitude======")
     println(model(x_test')[2, 1:10])
     println(y_test[1:10, 2])
+    println("======longitude======")
+    println(model(x_test')[3, 1:10])
+    println(y_test[1:10, 3])
     return min
 end
 

@@ -7,6 +7,26 @@ using Flux
 using HorseML.Preprocessing
 using BSON
 using BSON: @load
+using CSV
+using DataFrames
+using Statistics
+
+# load all the data
+function load_all_data()
+    # specify the number of data
+    data = Matrix{Float32}(undef, 35082, 7)
+    counts = 1
+    for year in 1974:2023
+        path = "C:\\Users\\Student\\Desktop\\WatasuM\\DisasterML\\data\\earthquake_csv\\$year.csv"
+        raw = Matrix(CSV.read(path, DataFrame))
+        for i in 1 : size(raw, 1)
+            row = raw[i, :]
+            data[counts, :] = collect(row)
+            counts += 1
+        end
+    end
+    return reverse(data, dims=1)
+end
 
 function predict(data)
     # load the model and scaler
@@ -15,23 +35,19 @@ function predict(data)
     @load "./main_model/model.bson" model
     # predict
     main_predict = inv_transform(tscaler, model(transform(xscaler, vcat(data[1:2], data[5])')')')
-    @load "./location_model/xscaler.bson" xscaler
-    @load "./location_model/tscaler.bson" tscaler
-    @load "./location_model/model.bson" model
+    @load "./location_model2/xscaler.bson" xscaler
+    @load "./location_model2/tscaler.bson" tscaler
+    @load "./location_model2/model.bson" model
     # predict
     location_predict = inv_transform(tscaler, model(transform(xscaler, data[3:5]')')')
     return hcat(main_predict, location_predict)
 end
 
-# route for providing API
-route("/earthquake.json", method=POST) do
-    json_data = jsonpayload()
-    earthquake_data = json_data["last"]
-    model_data = [earthquake_data["time"], earthquake_data["mag"], earthquake_data["lat"], earthquake_data["long"], earthquake_data["depth"]]
+function next_earthquake(datetime, model_data)
     output = predict(model_data)
-    hour = earthquake_data["time"] + Int(round(output[1]))
-    day = earthquake_data["day"]
-    month = earthquake_data["month"]
+    hour = datetime[3] + Int(round(output[1]))
+    day = datetime[2]
+    month = datetime[1]
     if hour > 24
         day += 1
         hour -= 24
@@ -43,16 +59,83 @@ route("/earthquake.json", method=POST) do
             month += 1
         end
     end
+    return [month, day, hour, round(output[2]*100)/100, round(output[3]*100)/100, round(output[4]*100)/100, round(output[5]*100)/100]
+end
+
+function predict_earthquakes(earthquake_data)
+    earthquakes = Array{Float32}(undef, 4, 7)
+    datetime = [earthquake_data["month"], earthquake_data["day"], earthquake_data["time"]]
+    model_data = [earthquake_data["time"], earthquake_data["mag"], earthquake_data["lat"], earthquake_data["long"], earthquake_data["depth"]]
+    for i in 1 : 4
+        earthquakes[i, :] = next_earthquake(datetime, model_data)
+        datetime = earthquakes[i, 1:3]
+        model_data = earthquakes[i, 3:7]
+    end
+    return earthquakes
+end
+
+function risk_calculation(data, lat, lon)
+    lat = round(lat*10)/10
+    lon = round(lon*10)/10
+    distance = mean(sqrt.((data[:, 5] .- lat).^2 + (data[:, 6] .- lon).^2))
+    magnitude = (32 .^ data[:, 4])
+    return mean(magnitude ./ (distance*10).^3)
+end
+
+# route for providing API
+route("/earthquake.json", method=POST) do
+    json_data = jsonpayload()
+    earthquake_data = json_data["last"]
+    earthquakes = predict_earthquakes(earthquake_data)
     data = Dict(
-        "month"=>month,
-        "day"=>day,
-        "hour"=>hour,
-        "mag"=>round(output[2]*100)/100,
-        "lat"=>round(output[3]*100)/100,
-        "lon"=>round(output[4]*100)/100,
+        "earthquake1"=>Dict(
+            "month"=>earthquakes[1, 1],
+            "day"=>earthquakes[1, 2],
+            "hour"=>earthquakes[1, 3],
+            "mag"=>earthquakes[1, 4],
+            "lat"=>earthquakes[1, 5],
+            "lon"=>earthquakes[1, 6],
+        ),
+        "earthquake2"=>Dict(
+            "month"=>earthquakes[2, 1],
+            "day"=>earthquakes[2, 2],
+            "hour"=>earthquakes[2, 3],
+            "mag"=>earthquakes[2, 4],
+            "lat"=>earthquakes[2, 5],
+            "lon"=>earthquakes[2, 6],
+        ),
+        "earthquake3"=>Dict(
+            "month"=>earthquakes[3, 1],
+            "day"=>earthquakes[3, 2],
+            "hour"=>earthquakes[3, 3],
+            "mag"=>earthquakes[3, 4],
+            "lat"=>earthquakes[3, 5],
+            "lon"=>earthquakes[3, 6],
+        ),
+        "earthquake4"=>Dict(
+            "month"=>earthquakes[4, 1],
+            "day"=>earthquakes[4, 2],
+            "hour"=>earthquakes[4, 3],
+            "mag"=>earthquakes[4, 4],
+            "lat"=>earthquakes[4, 5],
+            "lon"=>earthquakes[4, 6],
+        ),
         "id"=>json_data["jobID"]
         )
     json(data)
+end
+
+route("/risk.json", method=POST) do
+    json_data = jsonpayload()
+    risk = risk_calculation(load_all_data(), json_data["lat"], json_data["long"])
+    if risk == Inf
+        risk = 0
+    end
+    json(Dict(
+            "risk"=>risk,
+            "id"=>json_data["jobID"]
+        )
+    )
 end
 
 up(4000, async=false)
