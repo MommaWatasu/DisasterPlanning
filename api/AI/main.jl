@@ -18,7 +18,7 @@ function load_all_data()
     data = Matrix{Float32}(undef, 35082, 7)
     counts = 1
     for year in 1974:2023
-        path = "C:\\Users\\Student\\Desktop\\LachlanH\\DisasterPlanning\\api\\Earthquake Data\\csv_result\\$year.csv"
+        path = "../Earthquake Data/csv_result/$year.csv"
         raw = Matrix(CSV.read(path, DataFrame))
         for i in 1 : size(raw, 1)
             row = raw[i, :]
@@ -75,12 +75,14 @@ function predict_earthquakes(earthquake_data)
     return earthquakes
 end
 
+nan_to_num(x::Number) = (isequal(x, NaN)) ? 0 : x
+
 function risk_calculation(data, lat, lon)
     lat = round(lat*10)/10
     lon = round(lon*10)/10
-    distance = mean(sqrt.((data[:, 5] .- lat).^2 + (data[:, 6] .- lon).^2))
+    distance = mean(sqrt.(nan_to_num.((data[:, 5] .- lat).^2 + (data[:, 6] .- lon).^2)))
     magnitude = (32 .^ data[:, 4])
-    return mean(magnitude ./ (distance*10).^3)
+    return mean(nan_to_num.(magnitude ./ (distance*10).^3))
 end
 
 # load risk file

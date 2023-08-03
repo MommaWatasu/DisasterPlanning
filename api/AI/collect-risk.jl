@@ -40,7 +40,7 @@ function main()
         end
     end
     histogram(risks)
-    savefig("C:\\Users\\Student\\Desktop\\WatasuM\\DisasterPlanning\\api\\AI\\plot.png")
+    savefig("plot.png")
     df = DataFrame(risks[:, :], :auto)
     CSV.write("risks.csv", df)
 end
@@ -70,9 +70,10 @@ function plot_locations()
             push!(low, i)
         end
     end
-    plot(lats[high], lons[high], color="#ff0000", st=:scatter)
-    plot!(lats[middle], lons[middle], color="#00ff00", st=:scatter)
-    plot!(lats[low], lons[low], color="#0000ff", st=:scatter)
+    plot(lons[high], lats[high], color="#ff0000", label="high risk", xlabel="longitude", ylabel="latitude", st=:scatter)
+    plot!(lons[middle], lats[middle], color="#00ff00", label="medium risk", st=:scatter)
+    plot!(lons[low], lats[low], color="#0000ff", label="low risk", st=:scatter)
+    savefig("locations.png")
 
     df = DataFrame(hcat(lats[high], lons[high]), :auto)
     CSV.write("./risk-high.csv", df)
@@ -80,7 +81,6 @@ function plot_locations()
     CSV.write("./risk-middle.csv", df)
     df = DataFrame(hcat(lats[low], lons[low]), :auto)
     CSV.write("./risk-low.csv", df)
-    savefig("C:\\Users\\Student\\Desktop\\WatasuM\\DisasterPlanning\\api\\AI\\locations.png")
 end
 
 #main()
