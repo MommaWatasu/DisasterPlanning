@@ -45,4 +45,36 @@ function main()
     CSV.write("risks.csv", df)
 end
 
-main()
+function plot_locations()
+    lats = []
+    lons = []
+    risks = []
+    for lat in 36.5:0.1:38.5
+        for lon in -123.5:0.1:-121.5
+            r = get_risk(lat, lon)
+            println("risk: $r")
+            push!(risks, r)
+            push!(lats, lat)
+            push!(lons, lon)
+        end
+    end
+    high = []
+    middle = []
+    low = []
+    for i in 1 : length(risks)
+        if risks[i]>550
+            push!(high, i)
+        elseif 250<risks[i]<=550
+            push!(middle, i)
+        else
+            push!(low, i)
+        end
+    end
+    plot(lats[high], lons[high], color="#ff0000", st=:scatter)
+    plot!(lats[middle], lons[middle], color="#00ff00", st=:scatter)
+    plot!(lats[low], lons[low], color="#0000ff", st=:scatter)
+    savefig("C:\\Users\\Student\\Desktop\\WatasuM\\DisasterPlanning\\api\\AI\\locations.png")
+end
+
+#main()
+plot_locations()
