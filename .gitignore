@@ -3,3 +3,4 @@ node_modules
 
 # Ignore the risk_images directory
 \api\AI\risk_images
+api/AI/risk_images/*
