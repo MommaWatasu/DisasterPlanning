@@ -18,7 +18,7 @@ function load_all_data()
     data = Matrix{Float32}(undef, 35082, 7)
     counts = 1
     for year in 1974:2023
-        path = "C:\\Users\\Student\\Desktop\\LachlanH\\DisasterPlanning\\api\\Earthquake Data\\csv_result\\$year.csv"
+        path = "C:\\Users\\Student\\Desktop\\WatasuM\\DisasterPlanning\\api\\Earthquake Data\\csv_result\\$year.csv"
         raw = Matrix(CSV.read(path, DataFrame))
         for i in 1 : size(raw, 1)
             row = raw[i, :]
@@ -110,13 +110,13 @@ end
 
 function create_image(lat, lon, jobid)
     high = Matrix(CSV.read("./CSV/risk-high.csv", DataFrame))
-    plot(high[:, 1], high[:, 2], color="#ff0000")
+    plot(high[:, 1], high[:, 2], label="high risk", color="#ff0000", st=:scatter)
     midiam = Matrix(CSV.read("./CSV/risk-midiam.csv", DataFrame))
-    plot!(midiam[:, 1], midiam[:, 2], color="#00ff00")
+    plot!(midiam[:, 1], midiam[:, 2], label="midiam risk", color="#00ff00", st=:scatter)
     low = Matrix(CSV.read("./CSV/risk-low.csv", DataFrame))
-    plot!(low[:, 1], low[:, 2], color="#0000ff")
-    plot!(lat, lon, color="#ffffff", size=20)
-    #savefig("test.png")
+    plot!(low[:, 1], low[:, 2], label="low risk", color="#0000ff", st=:scatter)
+    plot!([lat], [lon], label="your location", color="#000000", markershape=:star, markersize=10, st=:scatter)
+    savefig("risk_images/$jobid.png")
 end
 
 # route for providing API
