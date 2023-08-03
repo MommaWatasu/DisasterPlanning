@@ -110,12 +110,12 @@ end
 
 function create_image(lat, lon, jobid)
     high = Matrix(CSV.read("./CSV/risk-high.csv", DataFrame))
-    plot(high[:, 1], high[:, 2], label="high risk", color="#ff0000", st=:scatter)
+    plot(high[:, 2], high[:, 1], label="high risk", color="#ff0000", xlabel="longitude", ylabel="latitude", st=:scatter)
     midiam = Matrix(CSV.read("./CSV/risk-midiam.csv", DataFrame))
-    plot!(midiam[:, 1], midiam[:, 2], label="midiam risk", color="#00ff00", st=:scatter)
+    plot!(midiam[:, 2], midiam[:, 1], label="midiam risk", color="#00ff00", st=:scatter)
     low = Matrix(CSV.read("./CSV/risk-low.csv", DataFrame))
-    plot!(low[:, 1], low[:, 2], label="low risk", color="#0000ff", st=:scatter)
-    plot!([lat], [lon], label="your location", color="#000000", markershape=:star, markersize=10, st=:scatter)
+    plot!(low[:, 2], low[:, 1], label="low risk", color="#0000ff", st=:scatter)
+    plot!([lon], [lat], label="your location", color="#000000", markershape=:star, markersize=10, st=:scatter)
     savefig("risk_images/$jobid.png")
 end
 
