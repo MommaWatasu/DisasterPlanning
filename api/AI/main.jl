@@ -10,6 +10,7 @@ using BSON: @load
 using CSV
 using DataFrames
 using Statistics
+using Plots
 
 # load all the data
 function load_all_data()
@@ -84,7 +85,7 @@ end
 
 # load risk file
 function load_risks()
-    path = "risks.csv"
+    path = "./CSV/risks.csv"
     return Matrix(CSV.read(path, DataFrame))
 end
 
@@ -105,6 +106,17 @@ function risk_level(risk)
     else
         return 2
     end
+end
+
+function create_image(lat, lon, jobid)
+    high = Matrix(CSV.read("./CSV/risk-high.csv", DataFrame))
+    plot(high[:, 1], high[:, 2], color="#ff0000")
+    midiam = Matrix(CSV.read("./CSV/risk-midiam.csv", DataFrame))
+    plot!(midiam[:, 1], midiam[:, 2], color="#00ff00")
+    low = Matrix(CSV.read("./CSV/risk-low.csv", DataFrame))
+    plot!(low[:, 1], low[:, 2], color="#0000ff")
+    plot!(lat, lon, color="#ffffff", size=20)
+    #savefig("test.png")
 end
 
 # route for providing API
@@ -152,7 +164,7 @@ end
 
 route("/risk.json", method=POST) do
     json_data = jsonpayload()
-    println(json_data)
+    create_image(json_data["lat"], json_data["long"], json_data["jobID"])
     risk = risk_calculation(load_all_data(), json_data["lat"], json_data["long"])
     if risk == Inf
         risk = 0

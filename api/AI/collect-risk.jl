@@ -73,6 +73,13 @@ function plot_locations()
     plot(lats[high], lons[high], color="#ff0000", st=:scatter)
     plot!(lats[middle], lons[middle], color="#00ff00", st=:scatter)
     plot!(lats[low], lons[low], color="#0000ff", st=:scatter)
+
+    df = DataFrame(hcat(lats[high], lons[high]), :auto)
+    CSV.write("./risk-high.csv", df)
+    df = DataFrame(hcat(lats[middle], lons[middle]), :auto)
+    CSV.write("./risk-middle.csv", df)
+    df = DataFrame(hcat(lats[low], lons[low]), :auto)
+    CSV.write("./risk-low.csv", df)
     savefig("C:\\Users\\Student\\Desktop\\WatasuM\\DisasterPlanning\\api\\AI\\locations.png")
 end
 
