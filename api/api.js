@@ -32,6 +32,16 @@ Userdb.doc("XuVCOg3Nk03dxo3uDqmM").get().then(async (doc) => {
 const GithubActionURL = "https://api.github.com/repos/MommaWatasu/DisasterPlanning/dispatches";
 const Token = "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";
 
+/* 
+axios.post("http://localhost:4000/risk.json", {
+    "jobID": "wake",
+    "lat": 37,
+    "long": -122,
+}).then((response) => {
+    console.log("AI Online");
+});
+*/
+
 const Months = [
     "",
     "January",
@@ -223,9 +233,18 @@ app.get("/api/ai/locations.png", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "api", "ai", "locations.png"));
 });
 
+app.get("/api/ai/image/:jobId", (req, res) => {
+    if(fs.existsSync(`../api/ai/risk_images/${req.params.jobId}.png`)){
+        res.sendFile("../api/ai/risk_images/" + req.params.jobId + ".png");
+    }else{
+        res.sendFile("../api/ai/locations.png");
+    }
+});
+
 app.get('/app/risk', async (req, res) => {
 
     var locals = {
+        "jobID": createRandomString(5),
     };
 
     var ip = await req.ip;
@@ -252,10 +271,12 @@ app.get('/app/risk', async (req, res) => {
     }
 
     var body = {
-        "jobID": "RISK",
+        "jobID": locals.jobID,
         "lat": Number(locals.latitude),
         "long": Number(locals.longitude)
     }
+
+    console.log(body)
 
     const risk = await axios.post("http://localhost:4000/risk.json", body)
     switch(risk.data.level){
@@ -274,6 +295,32 @@ app.get('/app/risk', async (req, res) => {
             locals.color = "rgb(212, 46, 34)";
         break;
     }
+
+    var currentDate = new Date();
+    const lastEarthquakes = await axios.get(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=37.423&longitude=-122.1639&maxradiuskm=180&minmagnitude=2&mindepth=0&maxdepth=1000&starttime=${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate() - 1}&endtime=${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`)
+    const recent = lastEarthquakes.data.features[0]
+
+    const earthquakes = await axios.post("http://localhost:4000/earthquakes.json", {
+        "name": "earthquake",
+        "city": locals.city,
+        "state": locals.region,
+        "longitude": locals.longitude,
+        "latitude": locals.latitude,
+        "ip": ip,
+        "status": "pending",
+        "jobID": locals.jobID,
+        "last": {
+            "time": new Date(recent.properties.time).getHours,
+            "mag": recent.properties.mag,
+            "lat": recent.geometry.coordinates[1],
+            "long": recent.geometry.coordinates[0],
+            "depth": recent.geometry.coordinates[2],
+            "day": new Date(recent.properties.time).getDate,
+            "month": new Date(recent.properties.time).getMonth + 1,
+        }
+    })
+
+    console.log(earthquakes.body)
 
     if (isMobile(req, res)) {
         res.render('new/mobile/indexinfo.ejs', locals);
