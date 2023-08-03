@@ -233,9 +233,9 @@ app.get("/api/ai/locations.png", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "api", "ai", "locations.png"));
 });
 
-app.get("/api/ai/image/:jobId", (req, res) => {
+app.get("/api/ai/risk_images/:jobId", (req, res) => {
     if(fs.existsSync(`../api/ai/risk_images/${req.params.jobId}.png`)){
-        res.sendFile("../api/ai/risk_images/" + req.params.jobId + ".png");
+        res.sendFile(path.join(__dirname, "..", "api", "ai", "risk_images", `${req.params.jobId}.png`));
     }else{
         res.sendFile("../api/ai/locations.png");
     }
@@ -278,7 +278,18 @@ app.get('/app/risk', async (req, res) => {
 
     console.log(body)
 
-    const risk = await axios.post("http://localhost:4000/risk.json", body)
+    var risk;
+
+    try{
+        risk = await axios.post("http://localhost:4000/risk.json", body)
+    }catch{
+        console.log("Error")
+        risk = {}
+        risk.data = {
+            "level": 3
+        }
+    }
+
     switch(risk.data.level){
         case 1:
             locals.rating = "Low Risk";
@@ -297,30 +308,49 @@ app.get('/app/risk', async (req, res) => {
     }
 
     var currentDate = new Date();
-    const lastEarthquakes = await axios.get(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=37.423&longitude=-122.1639&maxradiuskm=180&minmagnitude=2&mindepth=0&maxdepth=1000&starttime=${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate() - 1}&endtime=${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`)
+
+    var lastEarthquakes;
+    var worked = false;
+    var count = 0;
+    while(worked == false){
+        try{
+                lastEarthquakes = await axios.get(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=37.423&longitude=-122.1639&minmagnitude=2&mindepth=0&maxdepth=1000&starttime=${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}&endtime=${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}&maxradiuskm=180`)
+                count++;
+                if (lastEarthquakes.data.features.length > 0){
+                    worked = true;
+                    console.log(count)
+                    break;
+                }
+        }catch{
+            console.log("Waste of $1.7B tax payer dollars")
+        }
+    }
+    
     const recent = lastEarthquakes.data.features[0]
 
-    const earthquakes = await axios.post("http://localhost:4000/earthquakes.json", {
+    var body2 = {
         "name": "earthquake",
         "city": locals.city,
         "state": locals.region,
-        "longitude": locals.longitude,
-        "latitude": locals.latitude,
+        "longitude": Number(locals.longitude),
+        "latitude": Number(locals.latitude),
         "ip": ip,
         "status": "pending",
         "jobID": locals.jobID,
         "last": {
-            "time": new Date(recent.properties.time).getHours,
+            "time": await new Date(recent.properties.time).getHours,
             "mag": recent.properties.mag,
             "lat": recent.geometry.coordinates[1],
             "long": recent.geometry.coordinates[0],
             "depth": recent.geometry.coordinates[2],
-            "day": new Date(recent.properties.time).getDate,
-            "month": new Date(recent.properties.time).getMonth + 1,
+            "day": await new Date(recent.properties.time).getDate,
+            "month": await new Date(recent.properties.time).getMonth + 1,
         }
-    })
+    }
 
-    console.log(earthquakes.body)
+    const earthquakes = await axios.post("http://localhost:4000/earthquake.json", body2)
+
+    locals.predicted = earthquakes.data
 
     if (isMobile(req, res)) {
         res.render('new/mobile/indexinfo.ejs', locals);
