@@ -166,8 +166,8 @@ route("/risk.json", method=POST) do
     json_data = jsonpayload()
     create_image(json_data["lat"], json_data["long"], json_data["jobID"])
     risk = risk_calculation(load_all_data(), json_data["lat"], json_data["long"])
-    if risk == Inf
-        risk = 0
+    if risk == Inf || isequal(risk, NaN)
+        risk = 1000
     end
     json(Dict(
             "risk"=>risk,
