@@ -15,7 +15,7 @@ let userData = require('../data/users.json');
 let suppliesData = require('../data/supplies.json');
 let prepareData = require('../data/prepare.json');
 
-var serviceAccount = require("./service-account.json");
+var serviceAccount = require("E:/service-account.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
