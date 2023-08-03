@@ -17,7 +17,7 @@ function load_all_data()
     data = Matrix{Float32}(undef, 35082, 7)
     counts = 1
     for year in 1974:2023
-        path = "C:\\Users\\Student\\Desktop\\WatasuM\\DisasterML\\data\\earthquake_csv\\$year.csv"
+        path = "C:\\Users\\Student\\Desktop\\LachlanH\\DisasterPlanning\\api\\Earthquake Data\\csv_result\\$year.csv"
         raw = Matrix(CSV.read(path, DataFrame))
         for i in 1 : size(raw, 1)
             row = raw[i, :]
