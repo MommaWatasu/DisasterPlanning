@@ -19,7 +19,7 @@ function get_risk(lat, lon)
        }
        """)
     risk = JSON.parse(String(r.body))["risk"]
-    return (risk == 0) ? Inf : risk
+    return risk
 end
 
 function main()
