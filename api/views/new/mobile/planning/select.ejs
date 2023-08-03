@@ -22,7 +22,7 @@
 
             <div id="buttons" style="padding-top: 1.5em;">
                 <!--background: linear-gradient(135deg, rgba(253,200,48,1) 0%, rgba(243,115,53,1) 100%); -->
-                <a href="plan/earthquake" style="text-decoration: none;">
+                <a id="myParagraph" onclick="redirectToPageWithHeader()" style="text-decoration: none;">
                     <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
                         <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Earthquake</p>
                         <img src="../CDN/images/earthquake.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 1em; user-select: none;"/>
@@ -31,7 +31,7 @@
 
                 <div style="padding-top: 1.5em;"></div>
 
-                <a href="../app/risk" style="text-decoration: none;">
+                <a style="text-decoration: none;">
                     <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
                         <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Tornado</p>
                         <img src="../CDN/images/tornado.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 1em; user-select: none;"/>
@@ -40,7 +40,7 @@
 
                 <div style="padding-top: 1.5em;"></div>
 
-                <a href="./app/risk" style="text-decoration: none;">
+                <a style="text-decoration: none;">
                     <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
                         <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Tsunami</p>
                         <img src="../CDN/images/tsunami.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 1em; user-select: none;"/>
@@ -49,12 +49,40 @@
 
                 <div style="padding-top: 1.5em;"></div>
 
-                <a href="./app/risk" style="text-decoration: none;">
+                <a style="text-decoration: none;">
                     <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
                         <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Wildfire</p>
                         <img src="../CDN/images/wildfire.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 1em; user-select: none;"/>
                     </div>
                 </a>
+
+                <a onclick="redirectToPageWithHeader()" title="Redirect to Page with Header">
+                    Redirect to Page with Header
+                  </a>
+                  
+                  <script>
+                    const myParagraph = document.getElementById("myParagraph");
+
+                    myParagraph.addEventListener("mouseover", (event) => {
+                    event.target.style.cursor = "pointer";
+                    });
+
+                    myParagraph.addEventListener("mouseout", (event) => {
+                    event.target.style.cursor = "default";
+                    });
+
+                    function redirectToPageWithHeader() {
+                        console.log("hello hi")
+                        const jobId = localStorage.getItem(`plan_earthquake`);
+                        console.log(jobId);
+
+                        if (jobId){
+                            window.location.href = `/app/plan/earthquake/${jobId}`;
+                        } else {
+                            window.location.href = `/app/plan/earthquake`;
+                        }
+                    }
+                  </script>
             </div>
         </div>
     </body>

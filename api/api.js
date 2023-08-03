@@ -9,18 +9,71 @@ const fs = require('fs');
 const store = require('store');
 
 const userAgentParser = require("user-agent");
+var admin = require("firebase-admin");
 
 let userData = require('../data/users.json');
 let suppliesData = require('../data/supplies.json');
 let prepareData = require('../data/prepare.json');
 
+var serviceAccount = require("E:/service-account.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+const Userdb = db.collection('Users');
+/* 
+Userdb.doc("XuVCOg3Nk03dxo3uDqmM").get().then(async (doc) => {
+    console.log(await doc.data())
+});
+*/
+
 const GithubActionURL = "https://api.github.com/repos/MommaWatasu/DisasterPlanning/dispatches";
 const Token = "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";
+
+const Months = [
+    "",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+]
 
 const header = {
     "Accept": "application/vnd.github.everest-preview+json",
     "Content-Type": "application/json",
     "Authorization": "Bearer " + Token
+}
+
+async function getUser(id){
+    var user = await Userdb.doc(id).get();
+    if (!user.exists){
+        return null;
+    }else{
+        return user.data();
+    }
+}
+
+async function validateUser(id, token){
+    var user = await getUser(id);
+    if (user == null){
+        return false;
+    }else{
+        if (user.AccessTokens.indexOf(token)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 
 const isMobile = (req, res) => {
@@ -54,8 +107,11 @@ setTimeout(updateCache, 30000);
 
 async function getIPInfo(ip){
     console.log(ip)
+    if (ip.startsWith(":")) {
+        ip = "128.12.123.204";
+    }
     var info = await axios.get('https://ipapi.co/' + ip + '/json/');
-    return info.data;
+     return info.data;
 }
 
 const createRandomString = (length) => {
@@ -73,17 +129,11 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    var indexHtmlPath = path.join(__dirname, '..', 'webapp', 'index.html');
-    res.sendFile(indexHtmlPath);
+    res.redirect('/app');
 });
 
 app.get('/api', (req, res) => {
     var indexHtmlPath = path.join(__dirname, '..', 'webapp', 'api.html');
-    res.sendFile(indexHtmlPath);
-});
-
-app.get('/disasters', (req, res) => {
-    var indexHtmlPath = path.join(__dirname, '..', 'webapp', 'disasters.html');
     res.sendFile(indexHtmlPath);
 });
 
@@ -106,166 +156,6 @@ app.get('/CDN/images/:image', (req, res) => {
     catch {
         res.send('Image not found');
     }
-});
-
-app.get('/api/user/:name', (req, res) => {
-    var name = req.params.name;
-    var user = userData[name];
-    if(user){
-        res.json(user);
-    } else {
-        res.status(200).send('User not found');
-    } 
-});
-
-app.get('/api/supplies/:name', (req, res) => {
-    var name = req.params.name;
-    var supplies = suppliesData[name];
-    if(supplies){
-        res.json(supplies);
-    } else {
-        res.status(200).send('Supplies not found');
-    } 
-});
-
-app.get('/api/risk/:name/:long/:lati', (req, res) => {
-    if (req.params.name != "earthquake"){
-        res.send("Disaster not found");
-        return;
-    }
-
-    if (req.headers["jobID"] == undefined){
-        res.send("No job ID");
-        return;
-    }
-
-    var jobID = req.headers["jobID"];
-    var long = req.params.long;
-    var lati = req.params.lati;
-    var name = req.params.name;
-
-    if (jobCache[jobID] == undefined){
-        res.send("Job not found");
-        return;
-    }
-    
-    
-});
-
-app.get('/disaster/:name', async (req, res) => {
-    if (req.params.name != "earthquake"){
-        res.send("Disaster not found");
-        return;
-    }
-
-    var locals = {
-        name: req.params.name,
-    };
-
-    var ip = await req.ip;
-    console.log(ip);
-    if (ip.startsWith(":")) {
-        ip = "128.12.123.204";
-    }
-    
-    if (ip == "128.12.123.204"){
-        locals.city = "Stanford";
-        locals.region = "CA";
-        locals.longitude = "-122.1639";
-        locals.latitude = "37.423";
-        locals.response = false
-    }else{
-        var ipInfo = await getIPInfo(ip);
-    console.log(ipInfo);
-        if (ipInfo.city){
-            locals.city = ipInfo.city;
-            locals.region = ipInfo.region_code;
-            locals.longitude = ipInfo.longitude;
-            locals.latitude = ipInfo.latitude;
-            locals.response = false
-        }
-        else {
-            locals.city = "Stanford";
-            locals.region = "CA";
-            locals.longitude = "-122.1639";
-            locals.latitude = "37.423";
-            locals.response = false
-        }
-    }
-    
-
-    var jobID = null;
-    var found = true;
-
-    while (found == true){
-        jobID = createRandomString(8);
-        if (jobCache[jobID] == undefined){
-            found = false;
-            break;
-        }
-    }
-
-    //var previous = jobCache.find(job => job.ip == ip);
-
-    jobCache[jobID] = {
-        "name": req.params.name,
-        "city": locals.city,
-        "region": locals.region,
-        "longitude": locals.longitude,
-        "latitude": locals.latitude,
-        "jobID": jobID,
-        "ip": ip,
-        "status": "pending",
-        "time": Date.now()
-    }
-
-    await updateCache();
-    locals.response = true;
-    /* 
-    await axios.post(GithubActionURL, {
-        "event_type": "api",
-        "client_payload": {
-            "jobID": jobID,
-            "name": req.params.name,
-            "city": locals.city,
-            "region": locals.region,
-            "longitude": locals.longitude,
-            "latitude": locals.latitude,
-            "ip": ip
-        },   
-    }, header)
-  */
-    console.log(req.headers)
-    if (isMobile(req, res)) {
-        console.log("mobile")
-        res.render('new/mobile/indexinfo.ejs', locals);
-    } else {
-        res.render('new/mobile/indexinfo.ejs', locals);
-    }
-   
-});
-    
-app.get('/prepare/:name', async (req, res) => {
-    if (req.params.name != "earthquake"){
-        res.send("Disaster not found");
-        return;
-    }
-
-    var information = await prepareData[req.params.name];
-
-    var finalList = [];
-
-    for (let i = 0; i < information.options.length; i++) {
-        var detail = `<details style="justify-content: center; margin: 0 auto;"><summary>${information.options[i].name}</summary>`;
-        for (let ii = 0; ii < information.options[i].value.length; ii++) {
-            detail += `<p style:"white-space: pre-line;">${information.options[i].value[ii]}</p>`;
-        }
-        detail += "</details>";
-        finalList.push(detail);
-    }
-    information.finaloptions = finalList;
-
-    res.render('prepare.ejs', information);
 });
 
 app.get('/bard', (req, res) => {
@@ -295,7 +185,6 @@ app.get('/api/clientlocation', async (req, res) => {
 });
 
 app.get('/app', async (req, res) => {
-
     var locals = {
     };
 
@@ -330,6 +219,10 @@ app.get('/app', async (req, res) => {
    
 });
 
+app.get("/api/ai/locations.png", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "api", "ai", "locations.png"));
+});
+
 app.get('/app/risk', async (req, res) => {
 
     var locals = {
@@ -356,6 +249,30 @@ app.get('/app/risk', async (req, res) => {
             locals.latitude = ipInfo.latitude;
             locals.response = false
         }
+    }
+
+    var body = {
+        "jobID": "RISK",
+        "lat": Number(locals.latitude),
+        "long": Number(locals.longitude)
+    }
+
+    const risk = await axios.post("http://localhost:4000/risk.json", body)
+    switch(risk.data.level){
+        case 1:
+            locals.rating = "Low Risk";
+            locals.color = "green";
+        break;
+
+        case 2:
+            locals.rating = "Medium Risk";
+            locals.color = "orange";
+        break;
+
+        case 3:
+            locals.rating = "High Risk";
+            locals.color = "rgb(212, 46, 34)";
+        break;
     }
 
     if (isMobile(req, res)) {
@@ -400,68 +317,93 @@ app.get('/app/plan', async (req, res) => {
     }
 })
 
+app.get("/app/plans/:name", async (req, res) => {
+    
+});
+
 app.get("/app/plan/:name", async (req, res) => {
     var locals = {};
     locals.name = req.params.name;
 
     var ip = await req.ip;
-    console.log(ip);
-    if (ip.startsWith(":")) {
-        ip = "128.12.123.204";
-    }
-    
-    if (ip == "128.12.123.204"){
-        locals.city = "Stanford";
-        locals.region = "CA";
-        locals.longitude = "-122.1639";
-        locals.latitude = "37.423";
-        locals.response = false
-    }else{
-        var ipInfo = await getIPInfo(ip);
-        if (ipInfo.city){
-            locals.city = ipInfo.city;
-            locals.region = ipInfo.region_code;
-            locals.longitude = ipInfo.longitude;
-            locals.latitude = ipInfo.latitude;
-            locals.response = false
+    var ipInfo = await getIPInfo(ip);
+
+    locals.city = ipInfo.city;
+    locals.region = ipInfo.region_code;
+    locals.longitude = ipInfo.longitude;
+    locals.latitude = ipInfo.latitude;
+
+    var found = true;
+    var key = "";
+    while (found){
+        key = createRandomString(10);
+        if (planCache[key] == undefined){
+            found = false;
+        }else{
+            found = true;
         }
     }
-    console.log(store.get(`plan_${req.params.name}`))
+    planCache[key] = {
+        "name": req.params.name,
+        "ip": [await req.ip],
+        "time": new Date(),
+        "lastUpdated": new Date(),
+        "location": {
+            "city": locals.city,
+            "region": ipInfo.region_code,
+            "longitude": locals.longitude,
+            "latitude": locals.latitude
+        },
+        "actions": [],
+        "supplies": [],
+    };
 
-    
+    console.log(planCache[key])
 
-    if(store.get(`plan_${req.params.name}`)){
-        console.log("plan_jobs exists");
-        var planID = store.get(`plan_${req.params.name}`);
-        var plan = planCache[planID];
-        plan.ip.push(await req.ip);
-    }else{
-        var found = true;
-        var key = "";
-        while (found){
-            key = createRandomString(10);
-            if (planCache[key] == undefined){
-                found = false;
-            }else{
-                found = true;
-            }
-        }
-        planCache[key] = {
-            "name": req.params.name,
-            "ip": [await req.ip],
-            "time": new Date(),
-            "location": {
-                "city": locals.city,
-                "region": locals.region,
-                "longitude": locals.longitude,
-                "latitude": locals.latitude
-            },
-            "actions": [],
-            "supplies": [],
-        };
-        store.set(`plan_${req.params.name}`, key);
-        updateCache();
+    locals.planID = key;
+    locals.plan = planCache[key];
+
+    if (isMobile(req, res)) {
+        res.render('new/mobile/planning/createplan.ejs', locals);
+    } else {
+        res.render('new/mobile/planning/createplan.ejs', locals);
     }
+});
+
+app.get("/app/plan/:name/:planID", async (req, res) => {
+    var locals = {};
+    locals.name = req.params.name;
+    locals.planID = req.params.planID;
+
+    var ip = await req.ip;
+    var ipInfo = await getIPInfo(ip);
+
+    locals.city = ipInfo.city;
+    locals.region = ipInfo.region_code;
+    locals.longitude = ipInfo.longitude;
+    locals.latitude = ipInfo.latitude;
+
+    var plan = planCache[req.params.planID];
+
+    if (plan == undefined){
+        res.redirect("/app/plan/" + req.params.name);
+        return;
+    }
+
+    plan.ip.push(await req.ip);
+
+    locals.plan = plan;
+
+    console.log();
+
+    locals.text = {
+        "created": `${Months[new Date(locals.plan.time).getMonth() + 1]} ${new Date(locals.plan.time).getDate()}, ${new Date(locals.plan.time).getFullYear()}`,
+        "lastUpdated": `${Months[new Date(locals.plan.lastUpdated).getMonth() + 1]} ${new Date(locals.plan.lastUpdated).getDate()}, ${new Date(locals.plan.lastUpdated).getFullYear()}`,
+        "city": locals.plan.location.city,
+        "region": locals.plan.location.region,
+    }
+
+    console.log(locals)
 
     if (isMobile(req, res)) {
         res.render('new/mobile/planning/plan.ejs', locals);
@@ -470,17 +412,28 @@ app.get("/app/plan/:name", async (req, res) => {
     }
 });
 
-app.get("/api/storeadd", async (req, res) => {
-    store.set("test", "test");
-    res.send("done");
-});
+app.post("/api/plan/:jobid/update", async (req, res) => {
+    var plan = planCache[req.params.jobid];
 
-app.get("/api/storeget", async (req, res) => {
-    console.log(store.get("test"));
-    res.send(store.get("test"));
-});
+    if (plan == undefined){
+        res.send("not found");
+        return;
+    }
 
-app.post("/api/plan/:jobid/checked", async (req, res) => {
+    if (req.body.type == undefined){
+        res.send("invalid type");
+        return;
+    }
+
+    if (req.body.type == "action"){
+
+    }
+
+    var ip = await req.ip;
+    var ipInfo = await getIPInfo(ip);
+
+    plan.ip.push(await req.ip);
+    plan.lastUpdated = new Date();
 
 });
 
