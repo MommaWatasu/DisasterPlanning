@@ -12,6 +12,8 @@ using DataFrames
 using Statistics
 using Plots
 
+include("./tornado.jl")
+
 # load all the data
 function load_all_data()
     # specify the number of data
