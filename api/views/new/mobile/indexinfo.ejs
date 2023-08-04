@@ -1,98 +1,265 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="theme-color" content="rgb(254, 254, 254)"/>
-        
-        <title>Index for Earthquakes</title>
-        <link rel="stylesheet" href="../style2.css">
 
-        <script>
-            
-        </script>
-    </head>
-    <body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);">t
-        <header>
-            <img src="../CDN/images/earthquake.png" width="135em" height="135em" style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;"/>
-            <h1 class="textFont" style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">Disaster Index</1h>
-        </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="rgb(254, 254, 254)" />
+  <title>Index for Earthquakes</title>
+  <link rel="stylesheet" href="../style2.css">
+  <script>
+    /*
+         document.cookie = "userid=XuVCOg3Nk03dxo3uDqmM";
+         document.cookie = "sessiontoken=EhKUqQaPKm0QcX9IDE8cuioXzcvGT7to";
+         */
+    //localStorage.setItem("user", "[XuVCOg3Nk03dxo3uDqmM, EhKUqQaPKm0QcX9IDE8cuioXzcvGT7to]");
+    function setCookie(cname, cvalue, exdays) {
+      const d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    /*
+    setCookie("userid", "XuVCOg3Nk03dxo3uDqmM", 1);
+    setCookie("sessiontoken", "EhKUqQaPKm0QcX9IDE8cuioXzcvGT7to", 1);
+    */
+  </script>
+</head>
 
-        <div id="maincontent">
-            <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 3em; padding-top: 0em;">Information for <%=city%>, <%=region%></h1>
-            
-            <div id="risk-indicator" style="margin: auto; width: 20em; height: 3em; border-radius: 0.25cm;background-color: <%=color%>;">
-                <p class="textFont" style="color: white;text-align: center;font-weight: bold;user-select: none;font-size: 1.5em;padding-top: 0.35em;"><%=rating%></p>
-            </div>
+<body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);">
+  <header>
+    <a href="/" style="text-decoration: none;color: rgb(0, 0, 0);">
+      <img src="../CDN/images/earthquake.png" width="135em" height="135em"
+        style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;" />
+      <h1 class="textFont"
+        style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">
+        Disaster Index</1h>
+    </a>
+  </header>
+  <div id="maincontent">
+    <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 3em; padding-top: 0em;">
+      Information for <%=city%>, <%=region%></h1>
+    <div id="risk-indicator"
+      style="margin: auto; width: 20em; height: 3em; border-radius: 0.25cm;background-color: <%=color%>;">
+      <p class="textFont"
+        style="color: white;text-align: center;font-weight: bold;user-select: none;font-size: 1.5em;padding-top: 0.35em;">
+        <%=rating%></p>
+    </div>
+    <div id="map" style="padding-top: 2.5em;">
+      <iframe
+        src="https://maps.google.com/maps?width=150%;height=150%;hl=en&amp;q=<%=latitude%>,<%=longitude%>+(<%=city%>)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+        style="width: 90%; height: 25em;display:block;margin: auto;border-radius: 0.5em;border-width: 0.05em; border-color: black;"></iframe>
+    </div>
+    <div id="divider" style="padding-top: 0.5em;">
+      <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
+    </div>
+    <div id="explanation">
+      <h1 class="textFont"
+        style="color: rgb(35, 35, 35); text-align: center; font-size: 1.5em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: normal;">
+        The area is located in a seismically active region with a history of earthquakes. AI predictions indicate that
+        there is a high risk of earthquakes in the area in the near future.</h1>
+    </div>
+    <div id="divider" style="padding-top: 0.5em;">
+      <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
+    </div>
+    <div id="ai-data">
+      <h1 class="textFont"
+        style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: bold;">
+        Explanation:</h1>
+      <p class="textFont"
+        style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: rgb(0, 0, 0); font-size: 1.6em;">
+        The risk rating is a composite of multiple factors, including the predicted range of four future earthquakes.
+        The rating is on a scale of 1 to 3, with 1 being the lowest risk and 3 being the highest risk.</p>
+      <p class="textFont"
+        style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: darkred; font-size: 0.8em;">
+        The Disaster Index is only a prediction made by AI and is not to be used as a sole basis for decision-making. It
+        is important to consider other factors, such as historical data, current events, and expert opinion, when making
+        decisions about disaster preparedness. </p>
+      <div id="divider" style="padding-top: 0.5em;">
+        <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.05em; border-width: 0em;">
+      </div>
+      <img src="../api/ai/risk_images/<%=jobID%>" style="width: 52.5em; height: 35em; display: block; margin: 0 auto;">
+      <p class="textFont"
+        style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: black; font-size: 1.25em;">
+        The Y-axis on this graph represents your latitude, and the X-axis represents your longitude. The dots on the
+        graph represent the rating for each location. The star represents where your location falls on the graph.</p>
+      <p class="textFont"
+        style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: black; font-size: 1.25em;">
+        A Blue dot represents Low Risk, a Green dot represents Moderate Risk and Red representing High Risk.</p>
+      <div id="divider" style="padding-top: 0.5em;">
+        <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.05em; border-width: 0em;">
+      </div>
+      <h1 class="textFont"
+        style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: bold;">
+        AI Predictions:</h1>
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">
+              Month</th>
+            <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Day
+            </th>
+            <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">
+              Time</th>
+            <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">
+              Magnitude</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.months[locals.predicted.earthquake1.month]%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake1.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake1.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake1.mag%></td>
+          </tr>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.months[locals.predicted.earthquake2.month]%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake2.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake2.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake2.mag%></td>
+          </tr>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.months[locals.predicted.earthquake3.month]%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake3.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake3.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake3.mag%></td>
+          </tr>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.months[locals.predicted.earthquake4.month]%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake4.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake4.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.predicted.earthquake4.mag%></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="divider" style="padding-top: 0.5em;">
+        <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.05em; border-width: 0em;">
+      </div>
+      <h1 class="textFont"
+        style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: bold;">
+        Recent Earthquakes In The Area:</h1>
+      <h1 class="textFont"
+        style="color: rgb(35, 35, 35); text-align: center; font-size: 1.5em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: normal;">
+        Source: United States Geological Survey</h1>
+      <table style="margin: 0 auto;">
+        <thead>
+          <tr>
+            <th class="textFont" style="font-size: 2em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Place
+            </th>
+            <th class="textFont" style="font-size: 2em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Month
+            </th>
+            <th class="textFont" style="font-size: 2em; padding-left: 0.5em; padding-right: 0.5em; border-width: 0em;">
+              Day</th>
+            <th class="textFont" style="font-size: 2em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Time
+            </th>
+            <th class="textFont" style="font-size: 2em; padding-left: 0.5em; padding-right: 0.5em; border-width: 0em;">
+              Magnitude</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[0].place%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[0].time.month%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[0].time.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[0].time.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[0].mag%></td>
+          </tr>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[1].place%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[1].time.month%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[1].time.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[1].time.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[1].mag%></td>
+          </tr>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[2].place%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[2].time.month%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[2].time.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[2].time.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[2].mag%></td>
+          </tr>
+          <tr>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[3].place%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[3].time.month%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[3].time.day%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">
+              <%=locals.recents[3].time.hour%></td>
+            <td class="textFont"
+              style="border: 1px solid black; font-size: 1.7em; padding-left: 0.5em; padding-right: 0.5em; text-align: center;">
+              <%=locals.recents[3].mag%></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
 
-            <div id="map" style="padding-top: 2.5em;">
-                <iframe src="https://maps.google.com/maps?width=150%;height=150%;hl=en&amp;q=<%=latitude%>,<%=longitude%>+(<%=city%>)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" style="width: 90%; height: 25em;display:block;margin: auto;border-radius: 0.5em;border-width: 0.05em; border-color: black;"></iframe>
-            </div>
-
-            <div id="divider" style="padding-top: 0.5em;">
-                <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
-            </div>
-
-            <div id="explanation">
-                <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 1.5em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: normal;">The area is located in a seismically active region with a history of earthquakes. AI predictions indicate that there is a high risk of earthquakes in the area in the near future.</h1>
-            </div>
-
-            <div id="divider" style="padding-top: 0.5em;">
-                <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
-            </div>
-
-            <div id="ai-data">
-                <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: bold;">Explanation:</h1>
-                <p class="textFont" style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: rgb(0, 0, 0); font-size: 1.6em;">The risk rating is a composite of multiple factors, including the predicted range of four future earthquakes. The rating is on a scale of 1 to 3, with 1 being the lowest risk and 3 being the highest risk.</p>
-                <p class="textFont" style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: darkred; font-size: 0.8em;">The Disaster Index is only a prediction made by AI and is not to be used as a sole basis for decision-making. It is important to consider other factors, such as historical data, current events, and expert opinion, when making decisions about disaster preparedness. </p>
-                
-                <div id="divider" style="padding-top: 0.5em;">
-                    <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.05em; border-width: 0em;">
-                </div>                
-                <img src="../api/ai/risk_images/<%=jobID%>" style="width: 52.5em; height: 35em; display: block; margin: 0 auto;"> 
-                <p class="textFont" style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: black; font-size: 1.25em;">The Y-axis on this graph represents your latitude, and the X-axis represents your longitude. The dots on the graph represent the rating for each location. The star represents where your location falls on the graph.</p>
-                <p class="textFont" style="text-align: center; font-size: smaller; padding-top: 0.1em; padding-left: 0.2em; padding-right: 0.2em; padding-bottom: 0.5em;color: black; font-size: 1.25em;">A Blue dot represents Low Risk, a Green dot represents Moderate Risk and Red representing High Risk.</p>
-                <div id="divider" style="padding-top: 0.5em;">
-                    <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.05em; border-width: 0em;">
-                </div>  
-                <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;padding-left: 2em;padding-right: 2em;font-weight: bold;">AI Predictions:</h1>
-                <table style="margin: 0 auto;">
-                    <thead>
-                      <tr>
-                        <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Month</th>
-                        <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Day</th>
-                        <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Time</th>
-                        <th class="textFont" style="font-size: 2.5em; padding-left: 1em; padding-right: 1em; border-width: 0em;">Magnitude</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;"><%=locals.predicted.earthquake1.lat%></td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">31</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">2pm</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">3.5</td>
-                      </tr>
-                      <tr>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">January</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">31</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">2pm</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">3.5</td>
-                      </tr>
-                      <tr>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">January</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">31</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">2pm</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">3.5</td>
-                      </tr>
-                      <tr>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">January</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">31</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">2pm</td>
-                        <td class="textFont" style="border: 1px solid black; font-size: 1.7em; padding-left: 1em; padding-right: 1em; text-align: center;">3.5</td>
-                      </tr>
-                    </tbody>
-                  </table>
-            </div>
-            
-        </div>
-    </body>
 </html>

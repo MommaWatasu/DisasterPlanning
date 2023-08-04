@@ -1,44 +1,179 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="theme-color" content="rgb(200,200,200)"/>
-        
-        <title>Select Plan</title>
-        <link rel="stylesheet" href="../../../style2.css">
 
-        <script>
-            const jobId = localStorage.getItem(`plan_<%=name%>`);
-            console.log(jobId);
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="rgb(200,200,200)" />
 
-            if (jobId){
-                const text = await locals.text;
-            }else{
-                console.log("No job id");
-                window.location.href = `/app/plan/earthquake/`;
-            }
-            </script>
-    </head>
-    <body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);" class="fade-in-button">
-        <header>
-            <img src="../../../CDN/images/earthquake.png" width="135em" height="135em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block;"/>
-            <h1 class="textFont" style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">Disaster Index</1h>
-        </header>
+    <title>View Plan</title>
+    <link rel="stylesheet" href="../../../style2.css">
 
-        <div id="maincontent">
-            <h1 class="textFont" class="fade-in-button" style="color: rgb(35, 35, 35); text-align: center; font-size: 4em; padding-top: 0em;"><%=name%> Plan</h1>
+</head>
 
-            <h1 class="textFont" class="fade-in-button" style="color: rgb(35, 35, 35); text-align: center; font-size: 1.5em; padding-top: 0em; font-weight: normal;">Created: <%=text.created%></h1>
-            <h1 class="textFont" class="fade-in-button" style="color: rgb(35, 35, 35); text-align: center; font-size: 1.5em; padding-top: 0em; font-weight: normal;">Last Updated: <%=text.lastUpdated%></h1>
-            <h1 class="textFont" class="fade-in-button" style="color: rgb(35, 35, 35); text-align: center; font-size: 1.5em; padding-top: 0em; font-weight: normal;">Created For: <%=text.city%>, <%=text.region%></h1>
+<body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);"
+    class="fade-in-button">
+    <header>
+        <a href="/" style="text-decoration: none;color: rgb(0, 0, 0);">
+            <img src="../../../CDN/images/earthquake.png" width="135em" height="135em"
+                style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;" />
+            <h1 class="textFont"
+                style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">
+                Disaster Index</1h>
+        </a>
+    </header>
+
+    <div id="maincontent">
+        <h1 class="textFont" class="fade-in-button"
+            style="color: rgb(35, 35, 35); text-align: center; font-size: 4em; padding-top: 0em;"><%=locals.plan.name%>
+        </h1>
+
+        <h1 class="textFont" class="fade-in-button"
+            style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em; font-weight: normal;">
+            <%=locals.plan.location.city%>, <%=locals.plan.location.region%></h1>
+
+        <h1 class="textFont" class="fade-in-button"
+            style="color: rgb(35, 35, 35); text-align: left; font-size: 1.5em; padding-top: 0.5em; font-weight: normal;float:left;padding-left: 1.5em;">
+            Created: <%=locals.plan.createdatestring%></h1>
+
+        <h1 class="textFont" class="fade-in-button"
+            style="color: rgb(35, 35, 35); text-align: right;; font-size: 1.5em; padding-top: 0.5em; font-weight: normal; float:right; padding-right: 1.5em;">
+            Last Updated: <%=locals.plan.updatedstring%></h1>
+
+        <div id="divider" class="fade-in-button" style="padding-top: 0.5em;">
+            <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
+        </div>
+
+        <h1 class="textFont" class="fade-in-button"
+            style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;">Supplies</h1>
+
+        <div id="supplies-list" style="margin: 0 auto;">
+            <% for (let i = 0; i < plan.supplies.length; i++) { %>
+            <div id="item-<%= i%>"
+                style="width: 95%;  max-height: 100%; overflow: auto; background-color: rgb(228, 228, 228); border-radius: 0.25em;margin: 0 auto;">
+
+                <% if (locals.plan.supplies[i].owned) { %>
+                <input type="checkbox" id="checkbox" disabled checked
+                    style="width: 4em;height: 4em; float: left; margin-left: 1.2em; margin-top: 1.2em;" />
+                <% } else { %>
+                <input type="checkbox" id="checkbox" disabled
+                    style="width: 4em;height: 4em; float: left; margin-left: 1.2em; margin-top: 1.2em;" />
+                <% } %>
+
+                <h1 class="textFont"
+                    style="color:rgb(0, 0, 0); text-align: left; font-size: 1.85em;font-weight: bolder; padding-left: 3em;">
+                    <%= locals.plan.supplies[i].name %></h1>
+
+                <h1 class="textFont"
+                    style="color:rgb(0, 0, 0); text-align: left; font-weight: normal; font-size: 1.85em; padding-left: 1em;display: inline; float: left;">
+                    <%= locals.plan.supplies[i].description %></h1>
+
+                <% if (locals.plan.supplies[i].expiry.perishable) { %>
+                <% if (locals.plan.supplies[i].expiry.expires.toDate() < new Date()) { %>
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(182, 19, 19); text-align: right; font-size: 1.85em;font-weight: bold; padding-right: 0.5em; padding-top: 2em;">
+                    Expired <%= locals.plan.supplies[i].expiry.expires.toDate().toLocaleDateString() %></h1>
+                <% } else { %>
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(0, 0, 0); text-align: right; font-size: 1.85em;font-weight: bold; padding-right: 0.5em; padding-top: 2em;">
+                    Expires <%= locals.plan.supplies[i].expiry.expires.toDate().toLocaleDateString() %></h1>
+                <% } %>
+                <% } %>
+
+            </div>
+            <div style="padding-bottom: 1em;"></div>
+            <% } %>
+        </div>
+
+        <div id="action-list" style="margin: 0 auto;">
 
             <div id="divider" class="fade-in-button" style="padding-top: 0.5em;">
                 <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
             </div>
 
-            <h1 class="textFont" class="fade-in-button" style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;">Supplies</h1>
+            <h1 class="textFont" class="fade-in-button"
+                style="color: rgb(35, 35, 35); text-align: center; font-size: 2em; padding-top: 0em;">Actions</h1>
+            <div id="divider" class="fade-in-button">
+                <hr
+                    style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em; width: 90%;">
+            </div>
 
-            
+            <h1 class="textFont" class="fade-in-button"
+                style="color: rgb(35, 35, 35); text-align: center; font-size: 1.5em; padding-top: 0em;font-weight: normal;">
+                Before</h1>
+
+            <% for (let i = 0; i < plan.actions.before.length; i++) { %>
+            <div id="item-<%= i%>"
+                style="width: 95%;  max-height: 100%; overflow: auto; background-color: rgb(228, 228, 228); border-radius: 0.25em;margin: 0 auto;">
+
+                <input type="checkbox" id="checkbox"
+                    style="height: 5em; width: 5em; float: left; margin-left: 1.2em; margin-top: 1.2em;" />
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(35, 35, 35); text-align: left; font-size: 1.85em;font-weight: normal;font-weight: bold; padding-left: 3em;">
+                    <%=plan.actions.before[i].name%></h1>
+                <% if (locals.plan.actions.before[i].description == "Incomplete") { %>
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(255, 0, 0); text-align: left; font-size: 1.85em;font-weight: normal;font-weight: normal; padding-left: 0.5em;">
+                    <%=plan.actions.before[i].description%> </h1>
+                <% } else { %>
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(35, 35, 35); text-align: left; font-size: 1.85;font-weight: normal;font-weight: normal; padding-left: 0.5em;">
+                    <%=plan.actions.before[i].description%> </h1>
+                <% } %>
+
+            </div>
+            <div style="padding-bottom: 1em;"></div>
+            <% } %>
+
+            <div id="divider" class="fade-in-button">
+                <hr
+                    style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em; width: 90%;">
+            </div>
+
+            <h1 class="textFont" class="fade-in-button"
+                style="color: rgb(35, 35, 35); text-align: center; font-size: 1.85em; padding-top: 0em;font-weight: normal;">
+                During</h1>
+
+            <% for (let i = 0; i < plan.actions.during.length; i++) { %>
+            <div id="item-<%= i%>"
+                style="width: 95%; max-height: 100%; overflow: auto; background-color: rgb(228, 228, 228); border-radius: 0.25em;margin: 0 auto;">
+                <input type="checkbox" id="checkbox"
+                    style="height: 5em; width: 5em; float: left; margin-left: 1.2em; margin-top: 1.2em;" />
+
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(35, 35, 35); text-align: left; font-size: 1.85em;font-weight: normal;font-weight: bold; padding-left: 3em;">
+                    <%=plan.actions.during[i].name%></h1>
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(35, 35, 35); text-align: left; font-size: 1.85em;font-weight: normal;font-weight: normal; padding-left: 0.5em;">
+                    <%=plan.actions.during[i].description%> </h1>
+            </div>
+            <div style="padding-bottom: 1em;"></div>
+            <% } %>
+
+            <div id="divider" class="fade-in-button">
+                <hr
+                    style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em; width: 90%;">
+            </div>
+
+            <h1 class="textFont" class="fade-in-button"
+                style="color: rgb(35, 35, 35); text-align: center; font-size: 1.85em; padding-top: 0em;font-weight: normal;">
+                After</h1>
+
+            <% for (let i = 0; i < plan.actions.after.length; i++) { %>
+            <div id="item-<%= i%>"
+                style="width: 95%; max-height: 100%; overflow: auto; background-color: rgb(228, 228, 228); border-radius: 0.25em;margin: 0 auto;">
+                <input type="checkbox" id="checkbox"
+                    style="height: 5em; width: 5em; float: left; margin-left: 1.2em; margin-top: 1.2em;" />
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(35, 35, 35); text-align: left; font-size: 1.85em;font-weight: normal;font-weight: bold; padding-left: 3em;">
+                    <%=plan.actions.after[i].name%></h1>
+                <h1 class="textFont" class="fade-in-button"
+                    style="color: rgb(35, 35, 35); text-align: left; font-size: 1.85em;font-weight: normal;font-weight: normal; padding-left: 0.5em;">
+                    <%=plan.actions.after[i].description%> </h1>
+            </div>
+            <div style="padding-bottom: 1em;"></div>
+            <% } %>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

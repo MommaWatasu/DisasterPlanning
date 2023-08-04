@@ -1,48 +1,76 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="theme-color" content="rgb(238,238,238)"/>
-        
-        <title>Disaster Index</title>
-        <link rel="stylesheet" href="../style2.css">
-    </head>
-    <body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);">
-        <header>
-            <img src="../CDN/images/earthquake.png" width="135em" height="135em" style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;"/>
-            <h1 class="textFont" style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">Disaster Index</1h>
-        </header>
 
-        <div id="maincontent">
-            <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 4em; padding-top: 0em;"><%=city%>, <%=region%></h1>
-            
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="rgb(238,238,238)" />
 
-            <div id="map" style="padding-top: 0.5em;">
-                <iframe src="https://maps.google.com/maps?width=150%;height=150%;hl=en&amp;q=<%=latitude%>,<%=longitude%>+(<%=city%>)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" style="width: 90%; height: 25em;display:block;margin: auto;border-radius: 0.5em;border-width: 0.05em; border-color: black;"></iframe>
-            </div>
+    <title>Disaster Index</title>
+    <link rel="stylesheet" href="../style2.css">
+    <script>
+        function plans() {
 
-            <div id="divider" style="padding-top: 0.5em;">
-                <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
-            </div>
+        }
+    </script>
+</head>
 
-            <div id="buttons" style="padding-top: 1.5em;">
-                <!--background: linear-gradient(135deg, rgba(253,200,48,1) 0%, rgba(243,115,53,1) 100%); -->
-                <a href="../../app/risk" style="text-decoration: none;">
-                    <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
-                        <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Risk Assessment</p>
-                        <img src="../CDN/images/test-results.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 0.1em; user-select: none;"/>
-                    </div>
-                </a>
+<body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);">
+    <header>
+        <a href="/" style="text-decoration: none;color: rgb(0, 0, 0);">
+            <img src="../CDN/images/earthquake.png" width="135em" height="135em"
+                style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;" />
+            <h1 class="textFont"
+                style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">
+                Disaster Index</1h>
+        </a>
+    </header>
 
-                <div style="padding-top: 1.5em;"></div>
+    <div id="maincontent">
+        <h1 class="textFont" style="color: rgb(35, 35, 35); text-align: center; font-size: 4em; padding-top: 0em;">
+            <%=city%>, <%=region%></h1>
 
-                <a href="../../app/plan" style="text-decoration: none;">
-                    <div id="risk-indicator" style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
-                        <p class="textFont" style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">Make a Plan</p>
-                        <img src="../CDN/images/strategy-board.png" width="200em" height="200em" style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 0.1em; user-select: none;"/>
-                    </div>
-                </a>
-            </div>
+
+        <div id="map" style="padding-top: 0.5em;">
+            <iframe
+                src="https://maps.google.com/maps?width=150%;height=150%;hl=en&amp;q=<%=latitude%>,<%=longitude%>+(<%=city%>)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                style="width: 90%; height: 25em;display:block;margin: auto;border-radius: 0.5em;border-width: 0.05em; border-color: black;"></iframe>
         </div>
-    </body>
+
+        <div id="divider" style="padding-top: 0.5em;">
+            <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
+        </div>
+
+        <div id="buttons" style="padding-top: 1.5em;">
+            <!--background: linear-gradient(135deg, rgba(253,200,48,1) 0%, rgba(243,115,53,1) 100%); -->
+            <a href="../../app/risk" style="text-decoration: none;">
+                <div id="risk-indicator"
+                    style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
+                    <p class="textFont"
+                        style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">
+                        Risk Assessment</p>
+                    <img src="../CDN/images/test-results.png" width="200em" height="200em"
+                        style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 0.1em; user-select: none;" />
+                </div>
+            </a>
+
+            <div style="padding-top: 1.5em;"></div>
+
+            <a href="../../app/plans" style="text-decoration: none;">
+                <div id="risk-indicator"
+                    style="margin: auto; width: 95%; height: 15em;background-color: rgb(255, 255, 255); border-radius: 0.25cm; border:0.1em solid rgb(147, 147, 147);">
+                    <p class="textFont"
+                        style="color: rgb(0, 0, 0);text-align: left;font-weight: bolder;user-select: none;font-size: 1.5em;padding-top: 6em;padding-left: 0.25em;font-size: 2em; display: flex; justify-content: space-between; margin: 0; display: flex; float: left; user-select: none;">
+                        Plans</p>
+                    <img src="../CDN/images/strategy-board.png" width="200em" height="200em"
+                        style="padding-top:1.5em;margin-left: auto;margin-right: auto;display: block; float: right;padding-right: 0.1em; user-select: none;" />
+                </div>
+            </a>
+        </div>
+
+        <a href="../api/login" style="color: black; text-align: center;text-decoration: none;">
+            <p class="textFont" style="font-size: 1.5em;">Current User: <%=locals.user%></p>
+        </a>
+    </div>
+</body>
+
 </html>

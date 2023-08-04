@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="rgb(254, 254, 254)" />
+  <title>Index for Earthquakes</title>
+  <link rel="stylesheet" href="../style2.css">
+  <script>
+    /*
+         document.cookie = "userid=XuVCOg3Nk03dxo3uDqmM";
+         document.cookie = "sessiontoken=EhKUqQaPKm0QcX9IDE8cuioXzcvGT7to";
+         */
+    //localStorage.setItem("user", "[XuVCOg3Nk03dxo3uDqmM, EhKUqQaPKm0QcX9IDE8cuioXzcvGT7to]");
+    function setCookie(cname, cvalue, exdays) {
+      const d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    setCookie("userid", "XuVCOg3Nk03dxo3uDqmM", 1);
+    setCookie("sessiontoken", "EhKUqQaPKm0QcX9IDE8cuioXzcvGT7to", 1);
+
+    window.location.href = `/app`;
+  </script>
+</head>
+
+<body>
+  <header>
+  </header>
+  <div id="maincontent">
+  </div>
+</body>
+
+</html>

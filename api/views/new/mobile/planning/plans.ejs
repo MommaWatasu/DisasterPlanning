@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="rgb(238,238,238)" />
+    <title>Disaster Index</title>
+    <link rel="stylesheet" href="../style2.css">
+    <script></script>
+</head>
+
+<body style="background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(238,238,238,1) 100%);">
+    <header>
+        <a href="/" style="text-decoration: none;color: rgb(0, 0, 0);">
+            <img src="../CDN/images/earthquake.png" width="135em" height="135em"
+                style="padding-top:0.5em;margin-left: auto;margin-right: auto;display: block;" />
+            <h1 class="textFont"
+                style="color:rgb(0, 0, 0); text-align: center; padding-top: 0cm; padding-bottom: 0em; font-weight: normal; font-size: 1.75em;">
+                Disaster Index</1h>
+        </a>
+    </header>
+    <div id="maincontent">
+        <h1 class="textFont" class="fade-in-button"
+            style="color: rgb(35, 35, 35); text-align: left; font-size: 2em; padding-left: 1.25em; font-weight: bold;">
+            Created By You:</h1>
+        <div id="supplies-list" style="display: flex; justify-content: center; margin: 0 auto;">
+            <% for (let i = 0; i < plans.length; i++) { %>
+            <div id="item-<%= i%>"
+                style="width: 95%; max-height: 100%; overflow: auto; background-color: rgb(228, 228, 228); border-radius: 0.25em;margin: 0 auto;">
+                <img src="../CDN/images/earthquake.png" width="120em" height="120em"
+                    style="padding-top: 1em; padding-left: 1em; float: left;" />
+
+                <h1 class="textFont" s
+                    style="color:rgb(0, 0, 0); text-align: left; font-weight: bold; font-size: 2.5em; padding-left: 0.5em;display: inline; padding-top: 5em; margin-top: 1em;">
+                    <%= plans[i].name %></h1>
+
+                <h1 class="textFont"
+                    style="color:rgb(0, 0, 0); text-align: left; font-weight: normal; font-size: 1.5em; padding-left: 5em; margin-left: 1.6em;">
+                    Created: <%= plans[i].createdatestring %></h1>
+
+                <a href="../app/plans/edit/<%= plans[i].id %>"> <img src="../CDN/images/edit.png" width="50em"
+                        height="50em"
+                        style="padding-top: 0em; padding-right: 1em;float:right; padding-bottom: 0.75em;" />
+                </a>
+
+                <a href="../app/plans/view/<%= plans[i].id %>"> <img src="../CDN/images/view.png" width="50em"
+                        height="50em"
+                        style=" padding-top: 0em; padding-right: 2em; float:right; padding-bottom: 0.75em;" />
+                </a>
+            </div>
+            <% } %>
+        </div>
+        <div id="divider" class="fade-in-button" style="padding-top: 0.5em;">
+            <hr style="width: 95%; background-color: rgb(147, 147, 147); height: 0.15em; border-width: 0em;">
+        </div>
+        <h1 class="textFont" class="fade-in-button"
+        style="color: rgb(35, 35, 35); text-align: left; font-size: 2em; padding-left: 1.25em; font-weight: bold;">
+        Shared With You:</h1>
+    </div>
+</body>
+
+</html>
